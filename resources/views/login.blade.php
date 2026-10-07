@@ -2,287 +2,327 @@
 <html lang="id">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Login - Kebun Sawit</title>
 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
 
     <style>
-
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial, sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
         }
 
 
-        body{
-            height:100vh;
-            background:#f7f7f7;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-        }
+        body {
 
+            height: 100vh;
 
-        .container{
+            background: #f7f7f7;
 
-            width:950px;
-            height:720px;
+            display: flex;
 
-            background:white;
+            justify-content: center;
 
-            display:flex;
-
-            box-shadow:0 5px 25px rgba(0,0,0,.1);
-
-            border-radius:5px;
-
-            overflow:hidden;
+            align-items: center;
 
         }
 
 
+        /* CONTAINER */
 
-        .left{
+        .container {
 
-            width:35%;
+            width: 950px;
+
+            height: 720px;
+
+            background: white;
+
+            display: flex;
+
+            box-shadow: 0 5px 25px rgba(0, 0, 0, .1);
+
+            border-radius: 8px;
+
+            overflow: hidden;
+
+        }
+
+
+        /* LEFT */
+
+        .left {
+
+            width: 35%;
 
             background:
-            linear-gradient(
-                rgba(0,70,20,.4),
-                rgba(0,70,20,.4)
-            ),
-            url('/images/sawit.jpg');
+                linear-gradient(rgba(0, 50, 15, .55),
+                    rgba(0, 50, 15, .55)),
+                url('{{ asset("images/sawit.jpg") }}');
 
 
-            background-size:cover;
+            background-size: cover;
 
-            background-position:center;
+            background-position: center;
 
 
-            display:flex;
+            display: flex;
 
-            flex-direction:column;
+            flex-direction: column;
 
-            justify-content:center;
+            justify-content: center;
 
-            align-items:center;
+            align-items: center;
 
-            color:white;
+            color: white;
 
-            text-align:center;
+            text-align: center;
 
         }
 
 
 
-        .logo{
+        .logo {
 
-            width:110px;
+            width: 110px;
 
-            height:110px;
+            height: 110px;
 
-            background:white;
+            background: white;
 
-            border-radius:50%;
+            border-radius: 50%;
 
-            display:flex;
+            display: flex;
 
-            justify-content:center;
+            justify-content: center;
 
-            align-items:center;
+            align-items: center;
 
-            color:#126b28;
+            overflow: hidden;
 
-            font-size:45px;
-
-            font-weight:bold;
-
-            overflow:hidden;
-
-            margin-bottom:40px;
-
-        }
-
-         .logo img{
-                width:80%;
-                height:80%;
-                object-fit:contain;
-        }
-
-        .right{
-
-            width:65%;
-
-            padding:70px 90px;
+            margin-bottom: 40px;
 
         }
 
 
-        h2{
+        .logo img {
 
-            font-size:18px;
+            width: 80%;
 
-            font-weight:500;
+            height: 80%;
 
-            margin-bottom:10px;
+            object-fit: contain;
 
         }
 
 
 
+        .left p {
 
-        .subtitle{
+            font-size: 18px;
 
-            font-size:14px;
+            font-weight: 600;
 
-            margin-bottom:35px;
+            line-height: 1.6;
 
-            color:#666;
+            letter-spacing: 0.3px;
 
-        }
+            max-width: 260px;
 
-
-
-
-        label{
-
-            display:block;
-
-            font-size:14px;
-
-            margin-bottom:8px;
+            text-shadow:
+                0 2px 5px rgba(0, 0, 0, .5);
 
         }
 
 
 
+        /* RIGHT */
 
-        /* INPUT USERNAME DAN PASSWORD */
+        .right {
+
+            width: 65%;
+
+            padding: 70px 90px;
+
+        }
+
+
+        /* TITLE */
+
+        h2 {
+
+            font-size: 20px;
+
+            font-weight: 600;
+
+            margin-bottom: 10px;
+
+        }
+
+
+
+        .subtitle {
+
+            font-size: 14px;
+
+            color: #666;
+
+            margin-bottom: 35px;
+
+        }
+
+
+
+        label {
+
+            display: block;
+
+            font-size: 14px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+
+        /* INPUT */
+
 
         input[type="email"],
-        input[type="password"]{
+        input[type="password"] {
 
 
-            width:100%;
+            width: 100%;
 
-            height:55px;
+            height: 55px;
 
-            border:1px solid #ccc;
+            border: 1px solid #ccc;
 
-            border-radius:10px;
+            border-radius: 10px;
 
-            padding:0 20px;
+            padding: 0 20px;
 
-            font-size:15px;
+            font-size: 15px;
 
-            margin-bottom:25px;
+            margin-bottom: 25px;
 
         }
-
-
 
 
 
         /* CHECKBOX */
 
-        .remember{
 
-            display:flex;
+        .remember {
 
-            align-items:center;
+            display: flex;
 
-            gap:10px;
+            align-items: center;
 
-            font-size:14px;
+            gap: 10px;
 
-            margin-bottom:30px;
-
-        }
-
-
-
-        .remember input[type="checkbox"]{
-
-            width:16px;
-
-            height:16px;
-
-            margin:0;
-
-            padding:0;
+            margin-bottom: 30px;
 
         }
 
 
 
-        .remember label{
+        .remember input {
 
-            margin:0;
+            width: 18px;
 
-            line-height:16px;
-
-        }
-
-
-
-
-
-        button{
-
-            width:100%;
-
-            height:55px;
-
-            background:#08751b;
-
-            border:none;
-
-            color:white;
-
-            border-radius:10px;
-
-            font-size:16px;
-
-            cursor:pointer;
+            height: 18px;
 
         }
 
 
 
+        .remember label {
 
-        .forgot{
-
-            text-align:center;
-
-            margin-top:30px;
-
-            color:#08751b;
-
-            font-size:14px;
+            margin: 0;
 
         }
 
 
 
+        /* BUTTON */
 
 
-        .footer{
+        button {
 
-            position:absolute;
+            width: 100%;
 
-            bottom:40px;
+            height: 55px;
 
-            color:#888;
+            background: #08751b;
 
-            font-size:13px;
+            border: none;
+
+            color: white;
+
+            border-radius: 10px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
 
         }
 
 
+
+        button:hover {
+
+            background: #066414;
+
+        }
+
+
+
+        /* FORGOT */
+
+
+        .forgot {
+
+            text-align: center;
+
+            margin-top: 35px;
+
+            color: #08751b;
+
+            font-size: 14px;
+
+        }
+
+
+
+        /* FOOTER */
+
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 45px;
+
+            color: #888;
+
+            font-size: 13px;
+
+        }
     </style>
 
 
@@ -294,56 +334,31 @@
 
 
 
-<div class="container">
+    <div class="container">
 
 
 
-    <div class="left">
+        <div class="left">
 
 
-        <div class="logo">
+            <div class="logo">
 
-            <img src="{{ asset('images/logo-sg.png') }}" alt="logo SG">    
+                <img src="{{ asset('images/logo-sg.png') }}" alt="logo">
 
-        </div>
-
-
-
-        <p>
-
-            Sistem Manajemen Presisi<br>
-
-            Untuk Pertumbuhan<br>
-
-            Berkelanjutan
-
-        </p>
-
-
-    </div>
+            </div>
 
 
 
+            <p>
 
+                Sistem Manajemen Presisi<br>
 
-    <div class="right">
+                Untuk Pertumbuhan<br>
 
+                Berkelanjutan
 
-        <h2>
-            LOGIN
-        </h2>
+            </p>
 
-
-
-        <div class="subtitle">
-
-            Sudah memiliki akun?
-
-            <span style="color:#08751b">
-
-                Silakan masuk.
-
-            </span>
 
         </div>
 
@@ -351,73 +366,26 @@
 
 
 
-        <form method="POST" action="/login">
+        <div class="right">
 
 
-            @csrf
+            <h2>
 
+                LOGIN
 
-
-
-            <label>
-                Username
-            </label>
+            </h2>
 
 
 
-            <input
+            <div class="subtitle">
 
-                type="email"
+                Sudah memiliki akun?
 
-                name="email"
+                <span style="color:#08751b">
 
-                placeholder="Masukkan username Anda"
+                    Silakan masuk.
 
-            >
-
-
-
-
-
-            <label>
-                Password
-            </label>
-
-
-
-            <input
-
-                type="password"
-
-                name="password"
-
-                placeholder="••••••••"
-
-            >
-
-
-
-
-
-            <div class="remember">
-
-
-                <input
-
-                    type="checkbox"
-
-                    id="remember"
-
-                >
-
-
-
-                <label for="remember">
-
-                    Ingat username
-
-                </label>
-
+                </span>
 
 
             </div>
@@ -426,46 +394,89 @@
 
 
 
+            <form method="POST" action="/login">
 
 
-            <button>
+                @csrf
 
-                Masuk →
+                <label>
 
-            </button>
+                    Username
 
-
-
-        </form>
+                </label>
 
 
+                <input type="email" name="email" placeholder="Masukkan username Anda">
 
 
 
-        <div class="forgot">
+                <label>
 
-            Lupa nama pengguna dan kata sandi?
+                    Password
+
+                </label>
+
+
+                <input type="password" name="password" placeholder="••••••••">
+
+
+
+
+                <div class="remember">
+
+
+                    <input type="checkbox" id="remember">
+
+
+                    <label for="remember">
+
+                        Ingat username
+
+                    </label>
+
+
+
+                </div>
+
+
+
+
+
+                <button type="submit">
+
+                    Masuk →
+
+                </button>
+
+
+
+            </form>
+
+
+
+
+
+            <div class="forgot">
+
+                Lupa nama pengguna dan kata sandi?
+
+            </div>
+
+
+
+
+            <div class="footer">
+
+                © Sihombing Group
+
+            </div>
+
+
 
         </div>
 
 
-
     </div>
-
-
-
-</div>
-
-
-
-
-
-
-<div class="footer">
-
-© Sihombing Group
-
-</div>
 
 
 
