@@ -1005,7 +1005,7 @@
                     <span>Data Pohon & Lokasi</span>
                 </a>
 
-                <a href="#" class="menu-item">
+                <a href="{{ url('/dashboard/pemilik/input-pekerjaan') }}" class="menu-item">
                     <i data-lucide="tractor"></i>
                     <span>Input Pekerjaan</span>
                 </a>

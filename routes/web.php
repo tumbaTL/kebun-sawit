@@ -44,4 +44,10 @@ Route::middleware('auth')->group(function () {
         return view('dashboard.pohon-lokasi');
     })->name('pemilik.pohon-lokasi');
 
+
+    // Input Pekerjaan
+    Route::get('/dashboard/pemilik/input-pekerjaan', function () {
+        return view('dashboard.pekerjaan');
+    })->name('pemilik.input-pekerjaan');
+
 });
