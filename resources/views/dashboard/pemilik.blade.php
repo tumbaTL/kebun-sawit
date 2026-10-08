@@ -8,8 +8,7 @@
     <title>Dashboard Pemilik</title>
 
     <!-- Poppins -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -23,7 +22,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: #202020;
+            background: #f7f8f7;
             color: #343434;
             font-size: 13px;
         }
@@ -33,9 +32,9 @@
         ===================================================== */
 
         .app {
-            width: calc(100% - 32px);
-            height: calc(100vh - 24px);
-            margin: 12px 16px;
+            width: 100%;
+            height: 100vh;
+            margin: 0;
             background: #f7f8f7;
             display: flex;
             overflow: hidden;
@@ -114,7 +113,7 @@
 
         .sidebar-bottom {
             margin-top: auto;
-            padding: 0 10px 16px 10px;
+            padding: 0 10px 22px;
         }
 
         .sidebar-divider {
@@ -757,664 +756,660 @@
 
 <body>
 
-<div class="app">
+    <div class="app">
 
-    <!-- =====================================================
+        <!-- =====================================================
          SIDEBAR
     ====================================================== -->
 
-    <aside class="sidebar">
+        <aside class="sidebar">
 
-        <div class="brand">
-            <div class="brand-name">
-                Sihombing Group
+            <div class="brand">
+                <div class="brand-name">
+                    Sihombing Group
+                </div>
+
+                <div class="brand-subtitle">
+                    Dashboard
+                </div>
             </div>
 
-            <div class="brand-subtitle">
-                Dashboard
+
+            <nav class="menu">
+
+                <a href="{{ route('pemilik.dashboard') }}" class="menu-item active">
+                    <i data-lucide="grid-2x2"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{{ route('pemilik.pohon-lokasi') }}" class="menu-item">
+                    <i data-lucide="map"></i>
+                    <span>Data Pohon & Lokasi</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i data-lucide="tractor"></i>
+                    <span>Input Pekerjaan</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i data-lucide="archive"></i>
+                    <span>Kelola Perawatan</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i data-lucide="calendar-days"></i>
+                    <span>Kelola Jadwal</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i data-lucide="banknote"></i>
+                    <span>Laporan Keuangan</span>
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <div class="sidebar-divider"></div>
+
+                <a href="#" class="support">
+                    <i data-lucide="circle-help"></i>
+                    <span>Support</span>
+                </a>
+
+                <a href="{{ route('logout') }}" class="logout"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+
+                    <i data-lucide="log-out"></i>
+
+                    <span>Logout</span>
+
+                </a>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+
+                    @csrf
+
+                </form>
+
             </div>
-        </div>
+
+        </aside>
 
 
-        <nav class="menu">
-
-            <a href="#" class="menu-item active">
-                <i data-lucide="grid-2x2"></i>
-                <span>Dashboard</span>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i data-lucide="map"></i>
-                <span>Data Pohon & Lokasi</span>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i data-lucide="tractor"></i>
-                <span>Input Pekerjaan</span>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i data-lucide="archive"></i>
-                <span>Kelola Perawatan</span>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i data-lucide="calendar-days"></i>
-                <span>Kelola Jadwal</span>
-            </a>
-
-            <a href="#" class="menu-item">
-                <i data-lucide="banknote"></i>
-                <span>Laporan Keuangan</span>
-            </a>
-
-        </nav>
-
-
-        <div class="sidebar-bottom">
-
-            <div class="sidebar-divider"></div>
-
-            <a href="#" class="support">
-                <i data-lucide="circle-help"></i>
-                <span>Support</span>
-            </a>
-
-            <a href="{{ route('logout') }}"
-               class="logout"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-
-                <i data-lucide="log-out"></i>
-
-                <span>Logout</span>
-
-            </a>
-
-            <form id="logout-form"
-                  action="{{ route('logout') }}"
-                  method="POST"
-                  style="display:none;">
-
-                @csrf
-
-            </form>
-
-        </div>
-
-    </aside>
-
-
-    <!-- =====================================================
+        <!-- =====================================================
          MAIN
     ====================================================== -->
 
-    <main class="main">
+        <main class="main">
 
-        <!-- TOPBAR -->
+            <!-- TOPBAR -->
 
-        <header class="topbar">
+            <header class="topbar">
 
-            <div class="page-title">
-                Dashboard Pemilik
-            </div>
-
-
-            <div class="top-right">
-
-                <div class="top-icon">
-
-                    <i data-lucide="bell"></i>
-
-                    <span class="notification-dot"></span>
-
+                <div class="page-title">
+                    Dashboard Pemilik
                 </div>
 
 
-                <div class="top-icon">
+                <div class="top-right">
 
-                    <i data-lucide="settings"></i>
+                    <div class="top-icon">
 
-                </div>
+                        <i data-lucide="bell"></i>
 
-
-                <div class="profile">
-
-                    <div class="profile-avatar">
-
-                        @php
-                            $name = Auth::user()->name ?? 'Pemilik Kebun';
-                            $initials = collect(explode(' ', $name))
-                                ->map(fn($word) => strtoupper(substr($word, 0, 1)))
-                                ->take(2)
-                                ->implode('');
-                        @endphp
-
-                        {{ $initials }}
+                        <span class="notification-dot"></span>
 
                     </div>
 
 
-                    <div class="profile-info">
+                    <div class="top-icon">
 
-                        <div class="profile-name">
-                            {{ $name }}
-                        </div>
-
-                        <div class="profile-role">
-                            Estates Owner
-                        </div>
+                        <i data-lucide="settings"></i>
 
                     </div>
 
-                </div>
 
-            </div>
+                    <div class="profile">
 
-        </header>
+                        <div class="profile-avatar">
 
+                            @php
+                                $name = Auth::user()->name ?? 'Pemilik Kebun';
+                                $initials = collect(explode(' ', $name))
+                                    ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+                                    ->take(2)
+                                    ->implode('');
+                            @endphp
 
-        <!-- =================================================
-             CONTENT
-        ================================================== -->
+                            {{ $initials }}
 
-        <section class="content">
-
-
-            <!-- STATISTICS -->
-
-            <div class="stats">
-
-
-                <!-- TOTAL POHON -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon dark">
-                        <i data-lucide="trees"></i>
-                    </div>
-
-                    <div>
-
-                        <div class="stat-title">
-                            Total Pohon
                         </div>
 
-                        <div class="stat-value">
-                            12,450
-                        </div>
 
-                        <div class="stat-change">
-                            +12% vs last month
-                        </div>
+                        <div class="profile-info">
 
-                    </div>
-
-                </div>
-
-
-                <!-- TOTAL PEKERJA -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon light">
-                        <i data-lucide="users"></i>
-                    </div>
-
-                    <div>
-
-                        <div class="stat-title">
-                            Total Pekerja
-                        </div>
-
-                        <div class="stat-value">
-                            148
-                        </div>
-
-                        <div class="stat-normal">
-                            Active today
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- TUGAS AKTIF -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon green">
-                        <i data-lucide="circle-check"></i>
-                    </div>
-
-                    <div>
-
-                        <div class="stat-title">
-                            Tugas Aktif
-                        </div>
-
-                        <div class="stat-value">
-                            32
-                        </div>
-
-                        <div class="stat-urgent">
-                            4 Urgent tasks
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- JADWAL -->
-
-                <div class="stat-card">
-
-                    <div class="stat-icon gray">
-                        <i data-lucide="calendar-days"></i>
-                    </div>
-
-                    <div>
-
-                        <div class="stat-title">
-                            Jadwal Hari Ini
-                        </div>
-
-                        <div class="stat-value">
-                            18
-                        </div>
-
-                        <div class="stat-normal">
-                            Events & Inspections
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- MIDDLE -->
-
-            <div class="middle">
-
-
-                <!-- KONDISI KEBUN -->
-
-                <div class="chart-card">
-
-                    <div class="card-header">
-
-                        <div>
-
-                            <div class="card-title">
-                                Kondisi Kebun
+                            <div class="profile-name">
+                                {{ $name }}
                             </div>
 
-                            <div class="card-subtitle">
-                                Monitoring kesehatan kelapa sawit per blok
+                            <div class="profile-role">
+                                Estates Owner
                             </div>
 
                         </div>
 
-
-                        <select class="select-box">
-
-                            <option>
-                                7 Hari Terakhir
-                            </option>
-
-                            <option>
-                                30 Hari Terakhir
-                            </option>
-
-                            <option>
-                                3 Bulan Terakhir
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <div class="chart">
-
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-
                     </div>
 
                 </div>
 
-
-                <!-- RINGKASAN ESTATE -->
-
-                <div class="estate-card">
-
-                    <div class="estate-title">
-                        Ringkasan Estate
-                    </div>
-
-                    <div class="estate-description">
-
-                        Kesehatan keseluruhan estate mencapai 94%.
-                        Sistem irigasi berjalan optimal.
-
-                    </div>
-
-
-                    <div class="estate-row">
-
-                        <span>
-                            Blok Utara
-                        </span>
-
-                        <span class="estate-status">
-                            Sehat
-                        </span>
-
-                    </div>
-
-
-                    <div class="estate-row">
-
-                        <span>
-                            Blok Selatan
-                        </span>
-
-                        <span class="estate-status">
-                            Maintenance
-                        </span>
-
-                    </div>
-
-
-                    <div class="estate-row">
-
-                        <span>
-                            Nursery
-                        </span>
-
-                        <span class="estate-status">
-                            Optimal
-                        </span>
-
-                    </div>
-
-
-                    <button class="estate-button">
-                        Lihat Laporan Lengkap
-                    </button>
-
-                </div>
-
-            </div>
+            </header>
 
 
             <!-- =================================================
-                 AKTIVITAS TERBARU
-            ================================================== -->
+             CONTENT
+        ================================================== -->
 
-            <div class="activity-card">
+            <section class="content">
 
 
-                <div class="activity-header">
+                <!-- STATISTICS -->
 
-                    <div class="activity-title">
-                        Aktivitas Terbaru
+                <div class="stats">
+
+
+                    <!-- TOTAL POHON -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon dark">
+                            <i data-lucide="trees"></i>
+                        </div>
+
+                        <div>
+
+                            <div class="stat-title">
+                                Total Pohon
+                            </div>
+
+                            <div class="stat-value">
+                                12,450
+                            </div>
+
+                            <div class="stat-change">
+                                +12% vs last month
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <a href="#" class="view-all">
-                        Lihat Semua ›
-                    </a>
+
+                    <!-- TOTAL PEKERJA -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon light">
+                            <i data-lucide="users"></i>
+                        </div>
+
+                        <div>
+
+                            <div class="stat-title">
+                                Total Pekerja
+                            </div>
+
+                            <div class="stat-value">
+                                148
+                            </div>
+
+                            <div class="stat-normal">
+                                Active today
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TUGAS AKTIF -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon green">
+                            <i data-lucide="circle-check"></i>
+                        </div>
+
+                        <div>
+
+                            <div class="stat-title">
+                                Tugas Aktif
+                            </div>
+
+                            <div class="stat-value">
+                                32
+                            </div>
+
+                            <div class="stat-urgent">
+                                4 Urgent tasks
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- JADWAL -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon gray">
+                            <i data-lucide="calendar-days"></i>
+                        </div>
+
+                        <div>
+
+                            <div class="stat-title">
+                                Jadwal Hari Ini
+                            </div>
+
+                            <div class="stat-value">
+                                18
+                            </div>
+
+                            <div class="stat-normal">
+                                Events & Inspections
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
 
-                <table>
+                <!-- MIDDLE -->
 
-                    <thead>
-
-                    <tr>
-
-                        <th>
-                            TANGGAL
-                        </th>
-
-                        <th>
-                            AKTIVITAS
-                        </th>
-
-                        <th>
-                            PEKERJA
-                        </th>
-
-                        <th>
-                            STATUS
-                        </th>
-
-                        <th>
-                            AKSI
-                        </th>
-
-                    </tr>
-
-                    </thead>
+                <div class="middle">
 
 
-                    <tbody>
+                    <!-- KONDISI KEBUN -->
 
+                    <div class="chart-card">
 
-                    <!-- ROW 1 -->
+                        <div class="card-header">
 
-                    <tr>
+                            <div>
 
-                        <td class="date">
-                            24 Okt 2023,<br>
-                            09:15
-                        </td>
-
-                        <td class="activity-name">
-                            Pemupukan Blok A-12
-                        </td>
-
-                        <td>
-
-                            <div class="worker">
-
-                                <div class="worker-avatar">
-                                    AD
+                                <div class="card-title">
+                                    Kondisi Kebun
                                 </div>
 
-                                Agus Dermawan
+                                <div class="card-subtitle">
+                                    Monitoring kesehatan kelapa sawit per blok
+                                </div>
 
                             </div>
 
-                        </td>
 
-                        <td>
+                            <select class="select-box">
 
-                            <span class="status done">
-                                Selesai
+                                <option>
+                                    7 Hari Terakhir
+                                </option>
+
+                                <option>
+                                    30 Hari Terakhir
+                                </option>
+
+                                <option>
+                                    3 Bulan Terakhir
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="chart">
+
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RINGKASAN ESTATE -->
+
+                    <div class="estate-card">
+
+                        <div class="estate-title">
+                            Ringkasan Estate
+                        </div>
+
+                        <div class="estate-description">
+
+                            Kesehatan keseluruhan estate mencapai 94%.
+                            Sistem irigasi berjalan optimal.
+
+                        </div>
+
+
+                        <div class="estate-row">
+
+                            <span>
+                                Blok Utara
                             </span>
 
-                        </td>
-
-                        <td class="action">
-
-                            <i data-lucide="more-vertical"></i>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- ROW 2 -->
-
-                    <tr>
-
-                        <td class="date">
-                            24 Okt 2023,<br>
-                            08:30
-                        </td>
-
-                        <td class="activity-name">
-                            Inspeksi Hama Blok C-02
-                        </td>
-
-                        <td>
-
-                            <div class="worker">
-
-                                <div class="worker-avatar">
-                                    SM
-                                </div>
-
-                                Siti Maryam
-
-                            </div>
-
-                        </td>
-
-                        <td>
-
-                            <span class="status running">
-                                Sedang<br>Jalan
+                            <span class="estate-status">
+                                Sehat
                             </span>
 
-                        </td>
-
-                        <td class="action">
-
-                            <i data-lucide="more-vertical"></i>
-
-                        </td>
-
-                    </tr>
+                        </div>
 
 
-                    <!-- ROW 3 -->
+                        <div class="estate-row">
 
-                    <tr>
-
-                        <td class="date">
-                            23 Okt 2023,<br>
-                            16:45
-                        </td>
-
-                        <td class="activity-name">
-                            Panen TBS Blok B-05
-                        </td>
-
-                        <td>
-
-                            <div class="worker">
-
-                                <div class="worker-avatar">
-                                    RT
-                                </div>
-
-                                Rahmat Toyo
-
-                            </div>
-
-                        </td>
-
-                        <td>
-
-                            <span class="status urgent">
-                                Urgent
+                            <span>
+                                Blok Selatan
                             </span>
 
-                        </td>
-
-                        <td class="action">
-
-                            <i data-lucide="more-vertical"></i>
-
-                        </td>
-
-                    </tr>
-
-
-                    <!-- ROW 4 -->
-
-                    <tr>
-
-                        <td class="date">
-                            23 Okt 2023,<br>
-                            14:00
-                        </td>
-
-                        <td class="activity-name">
-                            Pembersihan Gulma Blok A-01
-                        </td>
-
-                        <td>
-
-                            <div class="worker">
-
-                                <div class="worker-avatar">
-                                    BK
-                                </div>
-
-                                Bambang Kusuma
-
-                            </div>
-
-                        </td>
-
-                        <td>
-
-                            <span class="status done">
-                                Selesai
+                            <span class="estate-status">
+                                Maintenance
                             </span>
 
-                        </td>
-
-                        <td class="action">
-
-                            <i data-lucide="more-vertical"></i>
-
-                        </td>
-
-                    </tr>
+                        </div>
 
 
-                    </tbody>
+                        <div class="estate-row">
 
-                </table>
+                            <span>
+                                Nursery
+                            </span>
 
-            </div>
+                            <span class="estate-status">
+                                Optimal
+                            </span>
 
-
-        </section>
-
-    </main>
-
-
-    <!-- FLOATING BUTTON -->
-
-    <button class="floating-button">
-
-        <i data-lucide="plus"></i>
-
-    </button>
+                        </div>
 
 
-</div>
+                        <button class="estate-button">
+                            Lihat Laporan Lengkap
+                        </button>
+
+                    </div>
+
+                </div>
 
 
-<script>
-    lucide.createIcons();
-</script>
+                <!-- =================================================
+                 AKTIVITAS TERBARU
+            ================================================== -->
+
+                <div class="activity-card">
+
+
+                    <div class="activity-header">
+
+                        <div class="activity-title">
+                            Aktivitas Terbaru
+                        </div>
+
+                        <a href="#" class="view-all">
+                            Lihat Semua ›
+                        </a>
+
+                    </div>
+
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    TANGGAL
+                                </th>
+
+                                <th>
+                                    AKTIVITAS
+                                </th>
+
+                                <th>
+                                    PEKERJA
+                                </th>
+
+                                <th>
+                                    STATUS
+                                </th>
+
+                                <th>
+                                    AKSI
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            <!-- ROW 1 -->
+
+                            <tr>
+
+                                <td class="date">
+                                    24 Okt 2023,<br>
+                                    09:15
+                                </td>
+
+                                <td class="activity-name">
+                                    Pemupukan Blok A-12
+                                </td>
+
+                                <td>
+
+                                    <div class="worker">
+
+                                        <div class="worker-avatar">
+                                            AD
+                                        </div>
+
+                                        Agus Dermawan
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="status done">
+                                        Selesai
+                                    </span>
+
+                                </td>
+
+                                <td class="action">
+
+                                    <i data-lucide="more-vertical"></i>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- ROW 2 -->
+
+                            <tr>
+
+                                <td class="date">
+                                    24 Okt 2023,<br>
+                                    08:30
+                                </td>
+
+                                <td class="activity-name">
+                                    Inspeksi Hama Blok C-02
+                                </td>
+
+                                <td>
+
+                                    <div class="worker">
+
+                                        <div class="worker-avatar">
+                                            SM
+                                        </div>
+
+                                        Siti Maryam
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="status running">
+                                        Sedang<br>Jalan
+                                    </span>
+
+                                </td>
+
+                                <td class="action">
+
+                                    <i data-lucide="more-vertical"></i>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- ROW 3 -->
+
+                            <tr>
+
+                                <td class="date">
+                                    23 Okt 2023,<br>
+                                    16:45
+                                </td>
+
+                                <td class="activity-name">
+                                    Panen TBS Blok B-05
+                                </td>
+
+                                <td>
+
+                                    <div class="worker">
+
+                                        <div class="worker-avatar">
+                                            RT
+                                        </div>
+
+                                        Rahmat Toyo
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="status urgent">
+                                        Urgent
+                                    </span>
+
+                                </td>
+
+                                <td class="action">
+
+                                    <i data-lucide="more-vertical"></i>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- ROW 4 -->
+
+                            <tr>
+
+                                <td class="date">
+                                    23 Okt 2023,<br>
+                                    14:00
+                                </td>
+
+                                <td class="activity-name">
+                                    Pembersihan Gulma Blok A-01
+                                </td>
+
+                                <td>
+
+                                    <div class="worker">
+
+                                        <div class="worker-avatar">
+                                            BK
+                                        </div>
+
+                                        Bambang Kusuma
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="status done">
+                                        Selesai
+                                    </span>
+
+                                </td>
+
+                                <td class="action">
+
+                                    <i data-lucide="more-vertical"></i>
+
+                                </td>
+
+                            </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </section>
+
+        </main>
+
+
+        <!-- FLOATING BUTTON -->
+
+        <button class="floating-button">
+
+            <i data-lucide="plus"></i>
+
+        </button>
+
+
+    </div>
+
+
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 
