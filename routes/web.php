@@ -50,4 +50,19 @@ Route::middleware('auth')->group(function () {
         return view('dashboard.pekerjaan');
     })->name('pemilik.input-pekerjaan');
 
+    // Kelola Perawatan
+    Route::get('/dashboard/pemilik/kelola-perawatan', function () {
+        return view('dashboard.perawatan');
+    })->name('pemilik.perawatan');
+
+    // Kelola Jadwal
+    Route::get('/dashboard/pemilik/kelola-jadwal', function () {
+        return view('dashboard.jadwal');
+    })->name('pemilik.jadwal');
+
+    // Laporan Keuangan
+    Route::get('/dashboard/pemilik/laporan-keuangan', function () {
+        return view('dashboard.keuangan');
+    })->name('pemilik.keuangan');
+
 });

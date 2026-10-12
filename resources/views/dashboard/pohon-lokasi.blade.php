@@ -1010,7 +1010,7 @@
                     <span>Input Pekerjaan</span>
                 </a>
 
-                <a href="#" class="menu-item">
+                <a href="{{ route('pemilik.perawatan') }}" class="menu-item">
                     <i data-lucide="archive"></i>
                     <span>Kelola Perawatan</span>
                 </a>
