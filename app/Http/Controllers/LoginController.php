@@ -24,17 +24,19 @@ class LoginController extends Controller
 
             $user = Auth::user();
 
+
             if ($user->role === 'pemilik') {
-                return redirect('/dashboard/pemilik');
+                return redirect()->route('pemilik.keuangan');
             }
 
             if ($user->role === 'staf') {
-                return redirect('/dashboard/staf');
+                return redirect()->route('pemilik.dashboard');
             }
 
             if ($user->role === 'pekerja') {
                 return redirect('/dashboard/pekerja');
             }
+
 
             Auth::logout();
 

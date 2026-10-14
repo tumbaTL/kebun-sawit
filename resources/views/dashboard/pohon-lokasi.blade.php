@@ -100,22 +100,34 @@
             font-size: 11.5px;
         }
 
+
         .menu-item svg {
             width: 16px;
             height: 16px;
+            min-width: 16px;
+            flex-shrink: 0;
             stroke-width: 1.8;
         }
 
-        .menu-item:hover {
-            background: #eaf8e9;
-            color: #08751b;
+        .menu-item span {
+            display: inline-block;
+            min-width: 0;
         }
 
+        /* MENU AKTIF - BERLAKU DI SEMUA UKURAN LAYAR */
         .menu-item.active {
             background: #8cf083;
             color: #086b22;
             border-left: 3px solid #08751b;
             padding-left: 12px;
+        }
+
+        .menu-item.active svg {
+            color: #086b22;
+        }
+
+        .menu a {
+            text-decoration: none;
         }
 
         /* BOTTOM SIDEBAR */
@@ -926,8 +938,10 @@
             }
 
             .menu-item.active {
-                padding-left: 0;
-                border-left: none;
+                background: #8cf083;
+                color: #086b22;
+                border-left: 3px solid #08751b;
+                padding-left: 12px;
             }
 
             .topbar {
@@ -993,39 +1007,55 @@
                 </div>
             </div>
 
+
+
             <nav class="menu">
 
-                <a href="{{ route('pemilik.dashboard') }}" class="menu-item">
-                    <i data-lucide="grid-2x2"></i>
-                    <span>Dashboard</span>
-                </a>
+                @if (auth()->user()->role === 'staf')
 
-                <a href="{{ route('pemilik.pohon-lokasi') }}" class="menu-item active">
-                    <i data-lucide="map"></i>
-                    <span>Data Pohon & Lokasi</span>
-                </a>
+                    <a href="{{ route('pemilik.dashboard') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.dashboard') ? 'active' : '' }}">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
 
-                <a href="{{ url('/dashboard/pemilik/input-pekerjaan') }}" class="menu-item">
-                    <i data-lucide="tractor"></i>
-                    <span>Input Pekerjaan</span>
-                </a>
+                    <a href="{{ route('pemilik.pohon-lokasi') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.pohon-lokasi') ? 'active' : '' }}">
+                        <i data-lucide="map"></i>
+                        <span>Data Pohon &amp; Lokasi</span>
+                    </a>
 
-                <a href="{{ route('pemilik.perawatan') }}" class="menu-item">
-                    <i data-lucide="archive"></i>
-                    <span>Kelola Perawatan</span>
-                </a>
+                    <a href="{{ route('pemilik.input-pekerjaan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.input-pekerjaan') ? 'active' : '' }}">
+                        <i data-lucide="tractor"></i>
+                        <span>Input Pekerjaan</span>
+                    </a>
 
-                <a href="#" class="menu-item">
-                    <i data-lucide="calendar-days"></i>
-                    <span>Kelola Jadwal</span>
-                </a>
+                    <a href="{{ route('pemilik.perawatan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.perawatan') ? 'active' : '' }}">
+                        <i data-lucide="archive"></i>
+                        <span>Kelola Perawatan</span>
+                    </a>
 
-                <a href="#" class="menu-item">
-                    <i data-lucide="banknote"></i>
-                    <span>Laporan Keuangan</span>
-                </a>
+                    <a href="{{ route('pemilik.jadwal') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.jadwal') ? 'active' : '' }}">
+                        <i data-lucide="calendar"></i>
+                        <span>Kelola Jadwal</span>
+                    </a>
+
+                @elseif (auth()->user()->role === 'pemilik')
+
+                    <a href="{{ route('pemilik.keuangan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.keuangan') ? 'active' : '' }}">
+                        <i data-lucide="banknote"></i>
+                        <span>Laporan Keuangan</span>
+                    </a>
+
+                @endif
 
             </nav>
+
+
 
             <div class="sidebar-bottom">
 
@@ -1036,18 +1066,16 @@
                     <span>Support</span>
                 </a>
 
-                <a href="{{ route('logout') }}" class="logout"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-
-                    <i data-lucide="log-out"></i>
-                    <span>Logout</span>
-
-                </a>
-
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
-
+                <form action="{{ route('logout') }}" method="POST">
                     @csrf
 
+                    <button type="submit" class="logout"
+                        style="width: 100%; border: none; background: transparent; cursor: pointer; font-family: inherit; text-align: left;">
+
+                        <i data-lucide="log-out"></i>
+                        <span>Logout</span>
+
+                    </button>
                 </form>
 
             </div>

@@ -57,20 +57,22 @@
            SIDEBAR
         ========================= */
 
+
         .sidebar {
             width: 195px;
             min-width: 195px;
             height: 100vh;
-
             position: sticky;
             top: 0;
-
-            background: #ffffff;
+            background: #fff;
             border-right: 1px solid #d9ded9;
-
             display: flex;
             flex-direction: column;
         }
+
+
+
+
 
         .brand {
             height: 83px;
@@ -89,8 +91,6 @@
             font-size: 11px;
         }
 
-        /* MENU */
-
         .menu {
             padding: 0 10px;
             margin-top: 0;
@@ -98,22 +98,15 @@
 
         .menu-item {
             height: 40px;
-
             display: flex;
             align-items: center;
-
             gap: 12px;
             padding: 0 15px;
-
             margin-bottom: 5px;
-
             color: #525852;
             text-decoration: none;
-
             border-radius: 0 22px 22px 0;
-
             transition: .2s;
-
             font-size: 11.5px;
         }
 
@@ -131,18 +124,22 @@
         .menu-item.active {
             background: #8cf083;
             color: #086b22;
-
             border-left: 3px solid #08751b;
             padding-left: 12px;
         }
+
+
 
         /* =========================
            SIDEBAR BOTTOM
         ========================= */
 
+
+
+
         .sidebar-bottom {
             margin-top: auto;
-            padding: 0 10px 16px 10px;
+            padding: 0 10px 22px;
         }
 
         .sidebar-divider {
@@ -154,18 +151,15 @@
         .support,
         .logout {
             height: 40px;
-
             display: flex;
             align-items: center;
-
             gap: 12px;
             padding: 0 15px;
-
             text-decoration: none;
             font-size: 11.5px;
-
             border-radius: 5px;
         }
+
 
         .support {
             color: #555;
@@ -787,44 +781,47 @@
                 </div>
             </div>
 
+
+
             <nav class="menu">
+                @if (auth()->user()->role === 'staf')
+                    <a href="{{ route('pemilik.dashboard') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.dashboard') ? 'active' : '' }}">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
 
-                <!-- Dashboard -->
-                <a href="{{ route('pemilik.dashboard') }}" class="menu-item">
-                    <i data-lucide="grid-2x2"></i>
-                    <span>Dashboard</span>
-                </a>
+                    <a href="{{ route('pemilik.pohon-lokasi') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.pohon-lokasi') ? 'active' : '' }}">
+                        <i data-lucide="map"></i>
+                        <span>Data Pohon &amp; Lokasi</span>
+                    </a>
 
-                <!-- Data Pohon & Lokasi -->
-                <a href="{{ url('/dashboard/pemilik/pohon-lokasi') }}" class="menu-item">
-                    <i data-lucide="map"></i>
-                    <span>Data Pohon & Lokasi</span>
-                </a>
+                    <a href="{{ route('pemilik.input-pekerjaan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.input-pekerjaan') ? 'active' : '' }}">
+                        <i data-lucide="tractor"></i>
+                        <span>Input Pekerjaan</span>
+                    </a>
 
-                <!-- Input Pekerjaan -->
-                <a href="{{ route('pemilik.input-pekerjaan') }}" class="menu-item">
-                    <i data-lucide="tractor"></i>
-                    <span>Input Pekerjaan</span>
-                </a>
+                    <a href="{{ route('pemilik.perawatan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.perawatan') ? 'active' : '' }}">
+                        <i data-lucide="archive"></i>
+                        <span>Kelola Perawatan</span>
+                    </a>
 
-                <!-- Kelola Perawatan -->
-                <a href="{{ route('pemilik.perawatan') }}" class="menu-item active">
-                    <i data-lucide="archive"></i>
-                    <span>Kelola Perawatan</span>
-                </a>
+                    <a href="{{ route('pemilik.jadwal') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.jadwal') ? 'active' : '' }}">
+                        <i data-lucide="calendar"></i>
+                        <span>Kelola Jadwal</span>
+                    </a>
 
-                <!-- Kelola Jadwal -->
-                <a href="{{ route('pemilik.jadwal') }}" class="menu-item">
-                    <i data-lucide="calendar-days"></i>
-                    <span>Kelola Jadwal</span>
-                </a>
-
-                <!-- Laporan Keuangan -->
-                <a href="{{ route('pemilik.keuangan') }}" class="menu-item">
-                    <i data-lucide="banknote"></i>
-                    <span>Laporan Keuangan</span>
-                </a>
-
+                @elseif (auth()->user()->role === 'pemilik')
+                    <a href="{{ route('pemilik.keuangan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.keuangan') ? 'active' : '' }}">
+                        <i data-lucide="banknote"></i>
+                        <span>Laporan Keuangan</span>
+                    </a>
+                @endif
             </nav>
 
             <div class="sidebar-bottom">

@@ -775,41 +775,55 @@
             </div>
 
 
+
+
             <nav class="menu">
 
-                <a href="{{ route('pemilik.dashboard') }}" class="menu-item active">
-                    <i data-lucide="grid-2x2"></i>
-                    <span>Dashboard</span>
-                </a>
+                @if (auth()->user()->role === 'staf')
 
-                <a href="{{ url('/dashboard/pemilik/pohon-lokasi') }}" class="menu-item">
-                    <i data-lucide="map"></i>
-                    <span>Data Pohon & Lokasi</span>
-                </a>
+                    <a href="{{ route('pemilik.dashboard') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.dashboard') ? 'active' : '' }}">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
 
-                <a href="{{ route('pemilik.input-pekerjaan') }}" class="menu-item">
-                    <i data-lucide="tractor"></i>
-                    <span>Input Pekerjaan</span>
-                </a>
+                    <a href="{{ route('pemilik.pohon-lokasi') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.pohon-lokasi') ? 'active' : '' }}">
+                        <i data-lucide="map"></i>
+                        <span>Data Pohon &amp; Lokasi</span>
+                    </a>
 
-                <a href="{{ route('pemilik.perawatan') }}" class="menu-item">
-                    <i data-lucide="archive"></i>
-                    <span>Kelola Perawatan</span>
-                </a>
+                    <a href="{{ route('pemilik.input-pekerjaan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.input-pekerjaan') ? 'active' : '' }}">
+                        <i data-lucide="tractor"></i>
+                        <span>Input Pekerjaan</span>
+                    </a>
 
-                <a href="{{ route('pemilik.jadwal') }}" class="menu-item">
-                    <i data-lucide="calendar-days"></i>
-                    <span>Kelola Jadwal</span>
-                </a>
+                    <a href="{{ route('pemilik.perawatan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.perawatan') ? 'active' : '' }}">
+                        <i data-lucide="archive"></i>
+                        <span>Kelola Perawatan</span>
+                    </a>
 
+                    <a href="{{ route('pemilik.jadwal') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.jadwal') ? 'active' : '' }}">
+                        <i data-lucide="calendar"></i>
+                        <span>Kelola Jadwal</span>
+                    </a>
 
-                <a href="{{ route('pemilik.keuangan') }}" class="menu-item">
-                    <i data-lucide="banknote"></i>
-                    <span>Laporan Keuangan</span>
-                </a>
+                @elseif (auth()->user()->role === 'pemilik')
 
+                    <a href="{{ route('pemilik.keuangan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.keuangan') ? 'active' : '' }}">
+                        <i data-lucide="banknote"></i>
+                        <span>Laporan Keuangan</span>
+                    </a>
+
+                @endif
 
             </nav>
+
+
 
 
             <div class="sidebar-bottom">
