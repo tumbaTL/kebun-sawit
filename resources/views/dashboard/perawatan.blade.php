@@ -814,13 +814,13 @@
                 </a>
 
                 <!-- Kelola Jadwal -->
-                <a href="#" class="menu-item">
+                <a href="{{ route('pemilik.jadwal') }}" class="menu-item">
                     <i data-lucide="calendar-days"></i>
                     <span>Kelola Jadwal</span>
                 </a>
 
                 <!-- Laporan Keuangan -->
-                <a href="#" class="menu-item">
+                <a href="{{ route('pemilik.keuangan') }}" class="menu-item">
                     <i data-lucide="banknote"></i>
                     <span>Laporan Keuangan</span>
                 </a>
