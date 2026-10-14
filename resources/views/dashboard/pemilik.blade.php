@@ -782,30 +782,32 @@
                     <span>Dashboard</span>
                 </a>
 
-                <a href="{{ route('pemilik.pohon-lokasi') }}" class="menu-item">
+                <a href="{{ url('/dashboard/pemilik/pohon-lokasi') }}" class="menu-item">
                     <i data-lucide="map"></i>
                     <span>Data Pohon & Lokasi</span>
                 </a>
 
-                <a href="#" class="menu-item">
+                <a href="{{ route('pemilik.input-pekerjaan') }}" class="menu-item">
                     <i data-lucide="tractor"></i>
                     <span>Input Pekerjaan</span>
                 </a>
 
-                <a href="#" class="menu-item">
+                <a href="{{ route('pemilik.perawatan') }}" class="menu-item">
                     <i data-lucide="archive"></i>
                     <span>Kelola Perawatan</span>
                 </a>
 
-                <a href="#" class="menu-item">
+                <a href="{{ route('pemilik.jadwal') }}" class="menu-item">
                     <i data-lucide="calendar-days"></i>
                     <span>Kelola Jadwal</span>
                 </a>
 
-                <a href="#" class="menu-item">
+
+                <a href="{{ route('pemilik.keuangan') }}" class="menu-item">
                     <i data-lucide="banknote"></i>
                     <span>Laporan Keuangan</span>
                 </a>
+
 
             </nav>
 
