@@ -398,6 +398,7 @@
 
 
                 @csrf
+                
 
                 <label>
 
@@ -447,6 +448,18 @@
                     Masuk →
 
                 </button>
+
+                
+                @csrf
+
+                @if ($errors->any())
+                    <div style="color: red; margin-bottom: 15px;">
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                @endif
+
 
 
 
