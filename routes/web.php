@@ -1,17 +1,23 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 
-// Halaman awal
+/*
+|--------------------------------------------------------------------------
+| HALAMAN AWAL
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// ==============================
-// LOGIN
-// ==============================
+/*
+|--------------------------------------------------------------------------
+| LOGIN DAN LOGOUT
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/login', [LoginController::class, 'showLogin'])
     ->name('login');
@@ -19,25 +25,24 @@ Route::get('/login', [LoginController::class, 'showLogin'])
 Route::post('/login', [LoginController::class, 'login'])
     ->name('login.process');
 
-// ==============================
-// LOGOUT
-// ==============================
-
 Route::post('/logout', [LoginController::class, 'logout'])
+    ->middleware('auth')
     ->name('logout');
 
-// ==============================
-// KHUSUS STAF
-// ==============================
+/*
+|--------------------------------------------------------------------------
+| KHUSUS STAF
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth', 'role:staf'])->group(function () {
 
-    // Dashboard
+    // Dashboard Staf
     Route::get('/dashboard/pemilik', function () {
         return view('dashboard.pemilik');
     })->name('pemilik.dashboard');
 
-    // Data Pohon & Lokasi
+    // Data Pohon dan Lokasi
     Route::get('/dashboard/pemilik/pohon-lokasi', function () {
         return view('dashboard.pohon-lokasi');
     })->name('pemilik.pohon-lokasi');
@@ -56,11 +61,34 @@ Route::middleware(['auth', 'role:staf'])->group(function () {
     Route::get('/dashboard/pemilik/kelola-jadwal', function () {
         return view('dashboard.jadwal');
     })->name('pemilik.jadwal');
+
 });
 
-// ==============================
-// KHUSUS PEMILIK
-// ==============================
+/*
+|--------------------------------------------------------------------------
+| KHUSUS PEKERJA
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:pekerja'])->group(function () {
+
+    // Dashboard Pekerja
+    Route::get('/dashboard/pekerja', function () {
+        return view('dashboard.pekerja');
+    })->name('pekerja.dashboard');
+
+    // Melihat Arahan Tugas
+    Route::get('/dashboard/pekerja/arahan-tugas', function () {
+        return view('dashboard.arahan-tugas');
+    })->name('pekerja.arahan-tugas');
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| KHUSUS PEMILIK KEBUN
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth', 'role:pemilik'])->group(function () {
 
