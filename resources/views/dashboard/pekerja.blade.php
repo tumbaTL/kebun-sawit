@@ -705,22 +705,20 @@
         </div>
 
         <nav class="menu">
-            <a href="{{ route('pekerja.dashboard') }}" class="active">
+            <a href="{{ route('pekerja.dashboard') }}"
+                class="{{ request()->routeIs('pekerja.dashboard') ? 'active' : '' }}">
                 <i data-lucide="layout-dashboard"></i>
                 <span>Dashboard</span>
             </a>
 
-            <a href="{{ route('pekerja.arahan-tugas') }}">
+            <a href="{{ route('pekerja.arahan-tugas') }}"
+                class="{{ request()->routeIs('pekerja.arahan-tugas') ? 'active' : '' }}">
                 <i data-lucide="clipboard-list"></i>
                 <span>Arahan Tugas</span>
             </a>
 
-            <a href="{{ route('pemilik.pohon-lokasi') }}">
-                <i data-lucide="trees"></i>
-                <span>Data Pohon</span>
-            </a>
-
-            <a href="{{ route('pemilik.input-pekerjaan') }}">
+            <a href="{{ route('pemilik.input-pekerjaan') }}"
+                class="{{ request()->routeIs('pemilik.input-pekerjaan') ? 'active' : '' }}">
                 <i data-lucide="file-text"></i>
                 <span>Laporan Pekerjaan</span>
             </a>

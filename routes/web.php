@@ -33,6 +33,7 @@ Route::post('/logout', [LoginController::class, 'logout'])
 |--------------------------------------------------------------------------
 | KHUSUS STAF
 |--------------------------------------------------------------------------
+| Staf mengelola pekerjaan, data pohon, perawatan, dan jadwal.
 */
 
 Route::middleware(['auth', 'role:staf'])->group(function () {
@@ -47,7 +48,7 @@ Route::middleware(['auth', 'role:staf'])->group(function () {
         return view('dashboard.pohon-lokasi');
     })->name('pemilik.pohon-lokasi');
 
-    // Input Pekerjaan
+    // Kelola Pekerjaan
     Route::get('/dashboard/pemilik/input-pekerjaan', function () {
         return view('dashboard.pekerjaan');
     })->name('pemilik.input-pekerjaan');
@@ -68,6 +69,7 @@ Route::middleware(['auth', 'role:staf'])->group(function () {
 |--------------------------------------------------------------------------
 | KHUSUS PEKERJA
 |--------------------------------------------------------------------------
+| Pekerja melihat arahan tugas dan mengirim laporan pekerjaan.
 */
 
 Route::middleware(['auth', 'role:pekerja'])->group(function () {
@@ -82,12 +84,18 @@ Route::middleware(['auth', 'role:pekerja'])->group(function () {
         return view('dashboard.arahan-tugas');
     })->name('pekerja.arahan-tugas');
 
+    // Laporan Pekerjaan
+    Route::get('/dashboard/pekerja/laporan-pekerjaan', function () {
+        return view('dashboard.laporan-pekerjaan');
+    })->name('pekerja.laporan-pekerjaan');
+
 });
 
 /*
 |--------------------------------------------------------------------------
 | KHUSUS PEMILIK KEBUN
 |--------------------------------------------------------------------------
+| Pemilik melihat laporan keuangan.
 */
 
 Route::middleware(['auth', 'role:pemilik'])->group(function () {
