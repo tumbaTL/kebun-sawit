@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\DashboardPemilikController;
+use App\Http\Controllers\KelolaJadwalController;
+use App\Http\Controllers\KelolaPerawatanController;
+use App\Http\Controllers\InputPekerjaanController;
+use App\Http\Controllers\PohonLokasiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 
@@ -39,29 +44,89 @@ Route::post('/logout', [LoginController::class, 'logout'])
 Route::middleware(['auth', 'role:staf'])->group(function () {
 
     // Dashboard Staf
-    Route::get('/dashboard/pemilik', function () {
-        return view('dashboard.pemilik');
-    })->name('pemilik.dashboard');
+    Route::get('/dashboard/pemilik', [
+        DashboardPemilikController::class,
+        'index'
+    ])->name('pemilik.dashboard');
 
     // Data Pohon dan Lokasi
-    Route::get('/dashboard/pemilik/pohon-lokasi', function () {
-        return view('dashboard.pohon-lokasi');
-    })->name('pemilik.pohon-lokasi');
+    Route::get('/dashboard/pemilik/pohon-lokasi', [
+        PohonLokasiController::class,
+        'index'
+    ])->name('pemilik.pohon-lokasi');
 
-    // Kelola Pekerjaan
-    Route::get('/dashboard/pemilik/input-pekerjaan', function () {
-        return view('dashboard.pekerjaan');
-    })->name('pemilik.input-pekerjaan');
+    Route::post('/dashboard/pemilik/pohon-lokasi', [
+        PohonLokasiController::class,
+        'store'
+    ])->name('pemilik.pohon-lokasi.store');
+
+    // Input Pekerjaan
+    Route::get('/dashboard/pemilik/input-pekerjaan', [
+        InputPekerjaanController::class,
+        'index'
+    ])->name('pemilik.input-pekerjaan');
+
+    Route::post('/dashboard/pemilik/input-pekerjaan', [
+        InputPekerjaanController::class,
+        'store'
+    ])->name('pemilik.input-pekerjaan.store');
+
+    // Edit tugas
+    Route::put('/dashboard/pemilik/input-pekerjaan/{task}', [
+        InputPekerjaanController::class,
+        'update'
+    ])->name('pemilik.input-pekerjaan.update');
+
+    // Hapus tugas
+    Route::delete('/dashboard/pemilik/input-pekerjaan/{task}', [
+        InputPekerjaanController::class,
+        'destroy'
+    ])->name('pemilik.input-pekerjaan.destroy');
 
     // Kelola Perawatan
-    Route::get('/dashboard/pemilik/kelola-perawatan', function () {
-        return view('dashboard.perawatan');
-    })->name('pemilik.perawatan');
+
+    // Kelola Perawatan
+    Route::get('/dashboard/pemilik/kelola-perawatan', [
+        KelolaPerawatanController::class,
+        'index'
+    ])->name('pemilik.perawatan');
+
+    Route::post('/dashboard/pemilik/kelola-perawatan', [
+        KelolaPerawatanController::class,
+        'store'
+    ])->name('pemilik.perawatan.store');
+
+    Route::put('/dashboard/pemilik/kelola-perawatan/{maintenance}', [
+        KelolaPerawatanController::class,
+        'update'
+    ])->name('pemilik.perawatan.update');
+
+    Route::delete('/dashboard/pemilik/kelola-perawatan/{maintenance}', [
+        KelolaPerawatanController::class,
+        'destroy'
+    ])->name('pemilik.perawatan.destroy');
 
     // Kelola Jadwal
-    Route::get('/dashboard/pemilik/kelola-jadwal', function () {
-        return view('dashboard.jadwal');
-    })->name('pemilik.jadwal');
+    Route::get('/dashboard/pemilik/kelola-jadwal', [
+        KelolaJadwalController::class,
+        'index'
+    ])->name('pemilik.jadwal');
+
+    Route::post('/dashboard/pemilik/kelola-jadwal', [
+        KelolaJadwalController::class,
+        'store'
+    ])->name('pemilik.jadwal.store');
+
+    Route::put('/dashboard/pemilik/kelola-jadwal/{maintenanceSchedule}', [
+        KelolaJadwalController::class,
+        'update'
+    ])->name('pemilik.jadwal.update');
+
+    Route::delete('/dashboard/pemilik/kelola-jadwal/{maintenanceSchedule}', [
+        KelolaJadwalController::class,
+        'destroy'
+    ])->name('pemilik.jadwal.destroy');
+
 
 });
 
