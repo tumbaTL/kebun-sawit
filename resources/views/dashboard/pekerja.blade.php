@@ -717,8 +717,8 @@
                 <span>Arahan Tugas</span>
             </a>
 
-            <a href="{{ route('pemilik.input-pekerjaan') }}"
-                class="{{ request()->routeIs('pemilik.input-pekerjaan') ? 'active' : '' }}">
+            <a href="{{ route('pekerja.laporan-pekerjaan') }}"
+                class="{{ request()->routeIs('pekerja.laporan-pekerjaan') ? 'active' : '' }}">
                 <i data-lucide="file-text"></i>
                 <span>Laporan Pekerjaan</span>
             </a>
