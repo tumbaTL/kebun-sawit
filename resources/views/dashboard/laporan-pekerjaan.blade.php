@@ -24,14 +24,13 @@
 
         body {
             margin: 0;
-            min-width: 760px;
-            font-family: 'Inter', Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             background: #f8f9f7;
             color: var(--text);
             font-size: 12px;
         }
 
-        /* SIDEBAR: ukuran dan gaya disamakan dengan halaman Arahan Tugas */
+        /* SIDEBAR: disamakan dengan halaman Arahan Tugas */
         .sidebar {
             position: fixed;
             inset: 0 auto 0 0;
@@ -144,14 +143,14 @@
         }
 
         .topbar {
-            height: 42px;
+            height: 54px;
             background: #fff;
             border-bottom: 1px solid #d8e0d5;
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding: 0 15px;
-            gap: 17px;
+            padding: 0 17px 0 25px;
+            gap: 16px;
         }
 
         .topbar-right {
@@ -161,8 +160,8 @@
         }
 
         .search-top {
-            width: 172px;
-            height: 32px;
+            width: 150px;
+            height: 27px;
             border: 1px solid #d6ded3;
             border-radius: 18px;
             padding: 0 9px;
@@ -194,8 +193,8 @@
         }
 
         .avatar {
-            width: 27px;
-            height: 27px;
+            width: 23px;
+            height: 23px;
             border-radius: 50%;
             background: #d9e3d7;
             color: #315c37;
@@ -211,24 +210,22 @@
         }
 
         .content {
-            width: 100%;
-            max-width: 1250px;
-            padding: 24px 32px 40px;
+            padding: 17px 28px 35px;
+            max-width: 1000px;
         }
 
         .page-title {
-            margin: 0 0 10px;
-            font-size: 24px;
+            margin: 0 0 4px;
+            font-size: 21px;
             line-height: 1.3;
             color: #202722;
         }
 
         .page-layout {
             display: grid;
-            grid-template-columns: minmax(430px, 1.8fr) minmax(230px, .82fr);
-            gap: 18px;
+            grid-template-columns: minmax(0, 1.65fr) minmax(150px, .8fr);
+            gap: 12px;
             align-items: start;
-            width: 100%;
         }
 
         .panel {
@@ -239,13 +236,13 @@
         }
 
         .form-panel {
-            padding: 18px 18px 17px;
+            padding: 13px 12px 12px;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px 16px;
+            gap: 12px 12px;
         }
 
         .field {
@@ -258,8 +255,8 @@
 
         .field label {
             display: block;
-            margin-bottom: 6px;
-            font-size: 12px;
+            margin-bottom: 5px;
+            font-size: 10px;
             color: #354237;
         }
 
@@ -269,9 +266,9 @@
             width: 100%;
             border: 1px solid #d5dfd2;
             border-radius: 5px;
-            padding: 9px 11px;
+            padding: 7px 9px;
             font-family: inherit;
-            font-size: 12px;
+            font-size: 10px;
             color: #364139;
             outline: none;
             background: #fff;
@@ -279,7 +276,7 @@
 
         .field input,
         .field select {
-            height: 38px;
+            height: 29px;
         }
 
         .field input:focus,
@@ -295,12 +292,12 @@
 
         .field textarea {
             resize: vertical;
-            min-height: 105px;
+            min-height: 71px;
             line-height: 1.5;
         }
 
         .upload-area {
-            min-height: 110px;
+            min-height: 80px;
             border: 1px dashed #b9c9b5;
             border-radius: 7px;
             background: #f4f5f3;
@@ -316,16 +313,16 @@
         }
 
         .upload-area svg {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
         }
 
         .upload-area strong {
-            font-size: 12px;
+            font-size: 10px;
         }
 
         .upload-area small {
-            font-size: 9px;
+            font-size: 8px;
             color: #59635a;
         }
 
@@ -341,8 +338,8 @@
         }
 
         .photo-preview img {
-            width: 52px;
-            height: 52px;
+            width: 41px;
+            height: 41px;
             border: 1px solid #d5dfd2;
             border-radius: 5px;
             object-fit: cover;
@@ -350,14 +347,14 @@
 
         .submit-btn {
             width: 100%;
-            min-height: 42px;
-            margin-top: 16px;
+            min-height: 31px;
+            margin-top: 12px;
             background: #2d7e35;
             color: #fff;
             border: 0;
             border-radius: 6px;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 11px;
             cursor: pointer;
             box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
         }
@@ -369,41 +366,41 @@
         .side-info {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         .tips-card {
             background: #347f40;
             color: #fff;
-            padding: 18px 17px;
+            padding: 13px 12px;
             border-radius: 7px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
         }
 
         .tips-card svg {
-            width: 20px;
-            height: 20px;
-            margin-bottom: 7px;
+            width: 17px;
+            height: 17px;
+            margin-bottom: 5px;
         }
 
         .tips-card h3 {
-            font-size: 14px;
-            margin: 0 0 9px;
+            font-size: 12px;
+            margin: 0 0 8px;
         }
 
         .tips-card p {
-            font-size: 12px;
-            line-height: 1.6;
+            font-size: 10px;
+            line-height: 1.55;
             margin: 0;
             color: #e3f0e3;
         }
 
         .summary-card {
-            padding: 17px 16px;
+            padding: 13px 12px;
         }
 
         .summary-title {
-            font-size: 10px;
+            font-size: 9px;
             letter-spacing: .3px;
             color: #465347;
             margin-bottom: 12px;
@@ -414,7 +411,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            font-size: 12px;
+            font-size: 10px;
         }
 
         .summary-row strong {
@@ -440,13 +437,13 @@
 
         .summary-card p {
             margin: 0;
-            font-size: 11px;
+            font-size: 9px;
             line-height: 1.55;
             color: #687268;
         }
 
         .history {
-            margin-top: 18px;
+            margin-top: 12px;
         }
 
         .history-heading {
@@ -458,13 +455,13 @@
 
         .history-heading h2 {
             margin: 0;
-            font-size: 16px;
+            font-size: 13px;
         }
 
         .history-heading a {
             color: #08752b;
             text-decoration: none;
-            font-size: 11px;
+            font-size: 9px;
         }
 
         .table-wrap {
@@ -483,17 +480,17 @@
 
         th {
             text-align: left;
-            padding: 12px 14px;
-            font-size: 10px;
+            padding: 9px 12px;
+            font-size: 8px;
             font-weight: 500;
             color: #4c574d;
             white-space: nowrap;
         }
 
         td {
-            padding: 13px 14px;
+            padding: 10px 12px;
             border-top: 1px solid #d8e0d5;
-            font-size: 11px;
+            font-size: 9px;
             color: #303a32;
         }
 
@@ -502,9 +499,9 @@
             align-items: center;
             gap: 3px;
             border-radius: 12px;
-            padding: 4px 8px;
+            padding: 3px 6px;
             white-space: nowrap;
-            font-size: 10px;
+            font-size: 8px;
         }
 
         .status svg {
@@ -534,10 +531,10 @@
         }
 
         .empty-history {
-            padding: 24px;
+            padding: 18px;
             text-align: center;
             color: #7a837a;
-            font-size: 12px;
+            font-size: 10px;
         }
 
         .alert {
@@ -555,33 +552,9 @@
             border-color: #f2caca;
         }
 
-        @media (max-width:1100px) {
+        @media (max-width:850px) {
             .content {
-                max-width: none;
-                padding: 22px 24px 35px;
-            }
-
-            .page-layout {
-                grid-template-columns: minmax(0, 1.45fr) minmax(220px, .8fr);
-                gap: 16px;
-            }
-        }
-
-        @media (max-width:800px) {
-            body {
-                min-width: 0;
-            }
-
-            .sidebar {
-                width: 200px;
-            }
-
-            .main {
-                margin-left: 200px;
-            }
-
-            .content {
-                padding: 20px 18px 30px;
+                padding: 18px 16px;
             }
 
             .page-layout {
@@ -594,47 +567,7 @@
             }
         }
 
-        @media (max-width:560px) {
-            .sidebar {
-                width: 68px;
-            }
-
-            .brand {
-                padding: 14px 5px;
-                text-align: center;
-            }
-
-            .brand h2 {
-                font-size: 10px;
-                line-height: 1.4;
-                overflow: hidden;
-            }
-
-            .brand p,
-            .menu a span,
-            .sidebar-bottom a span {
-                display: none;
-            }
-
-            .menu {
-                padding: 12px 5px;
-            }
-
-            .menu a {
-                justify-content: center;
-                padding: 0;
-                border-radius: 8px;
-            }
-
-            .sidebar-bottom a {
-                justify-content: center;
-                padding: 10px 0;
-            }
-
-            .main {
-                margin-left: 68px;
-            }
-
+        @media (max-width:580px) {
             .topbar {
                 padding: 0 10px;
             }
@@ -648,14 +581,9 @@
             }
 
             .content {
-                padding: 18px 10px 28px;
+                padding: 17px 10px;
             }
 
-            .page-title {
-                font-size: 20px;
-            }
-
-            .page-layout,
             .form-grid,
             .side-info {
                 grid-template-columns: 1fr;
@@ -677,6 +605,8 @@
         $arahanRoute = \Illuminate\Support\Facades\Route::has('pekerja.arahan-tugas')
             ? route('pekerja.arahan-tugas') : url('/dashboard/pekerja/arahan-tugas');
         $logoutRoute = \Illuminate\Support\Facades\Route::has('logout') ? route('logout') : url('/logout');
+        $laporanStoreRoute = \Illuminate\Support\Facades\Route::has('pekerja.laporan-pekerjaan.store')
+            ? route('pekerja.laporan-pekerjaan.store') : $laporanRoute;
         $riwayat = $riwayat ?? collect();
         $tugas = $tugas ?? collect();
         $totalTugas = isset($totalTugas) ? (int) $totalTugas : $tugas->count();
@@ -689,26 +619,39 @@
             <h2>Sihombing Group</h2>
             <p>Dashboard Pekerja</p>
         </div>
+
         <nav class="menu">
             <a href="{{ $dashboardRoute }}" class="{{ request()->routeIs('pekerja.dashboard') ? 'active' : '' }}">
-                <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
             </a>
+
             <a href="{{ $arahanRoute }}" class="{{ request()->routeIs('pekerja.arahan-tugas') ? 'active' : '' }}">
-                <i data-lucide="clipboard-list"></i><span>Arahan Tugas</span>
+                <i data-lucide="clipboard-list"></i>
+                <span>Arahan Tugas</span>
             </a>
+
             <a href="{{ $laporanRoute }}" class="{{ request()->routeIs('pekerja.laporan-pekerjaan') ? 'active' : '' }}">
-                <i data-lucide="file-text"></i><span>Laporan Pekerjaan</span>
+                <i data-lucide="file-text"></i>
+                <span>Laporan Pekerjaan</span>
             </a>
         </nav>
+
         <div class="sidebar-bottom">
             <a href="#" onclick="alert('Silakan hubungi administrator untuk bantuan.'); return false;">
-                <i data-lucide="circle-help"></i><span>Support</span>
+                <i data-lucide="circle-help"></i>
+                <span>Support</span>
             </a>
+
             <a href="{{ $logoutRoute }}" class="logout"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i data-lucide="log-out"></i><span>Logout</span>
+                <i data-lucide="log-out"></i>
+                <span>Logout</span>
             </a>
-            <form id="logout-form" action="{{ $logoutRoute }}" method="POST" style="display:none">@csrf</form>
+
+            <form id="logout-form" action="{{ $logoutRoute }}" method="POST" style="display:none;">
+                @csrf
+            </form>
         </div>
     </aside>
 
@@ -742,13 +685,13 @@
 
             <div class="page-layout">
                 <section class="panel form-panel">
-                    <form action="{{ $laporanRoute }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ $laporanStoreRoute }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-grid">
                             <div class="field">
                                 <label for="id_laporan">ID Laporan</label>
                                 <input type="text" id="id_laporan" name="id_laporan"
-                                    value="{{ old('id_laporan', 'REP-' . now()->format('Ymd') . '-' . str_pad((string) random_int(1, 9999), 4, '0', STR_PAD_LEFT)) }}"
+                                    value="{{ old('id_laporan', $reportCode ?? ('REP-' . now()->format('Ymd') . '-' . str_pad((string) random_int(1, 9999), 4, '0', STR_PAD_LEFT))) }}"
                                     readonly>
                             </div>
                             <div class="field">
@@ -762,8 +705,8 @@
                                     <option value="">-- Pilih Tugas Sesuai Jadwal --</option>
                                     @foreach ($tugas as $item)
                                         <option value="{{ data_get($item, 'id') }}" @selected((string) old('tugas_id') === (string) data_get($item, 'id'))>
-                                            {{ data_get($item, 'nama_tugas', data_get($item, 'jenis_tugas', 'Tugas')) }}@if(data_get($item, 'lokasi'))
-                                            — {{ data_get($item, 'lokasi') }}@endif
+                                            {{ data_get($item, 'name', data_get($item, 'nama_tugas', data_get($item, 'jenis_tugas', 'Tugas'))) }}@if(data_get($item, 'location', data_get($item, 'lokasi')))
+                                            — {{ data_get($item, 'location', data_get($item, 'lokasi')) }}@endif
                                         </option>
                                     @endforeach
                                 </select>
@@ -834,17 +777,18 @@
                             <tbody>
                                 @foreach ($riwayat as $laporan)
                                     @php
-                                        $status = strtolower((string) data_get($laporan, 'status_verifikasi', data_get($laporan, 'status', 'menunggu')));
+                                        $status = strtolower((string) data_get($laporan, 'status_verification', data_get($laporan, 'status_verifikasi', data_get($laporan, 'status', 'menunggu'))));
                                         $verified = in_array($status, ['terverifikasi', 'verified', 'disetujui', 'selesai']);
-                                        $tanggal = data_get($laporan, 'tanggal_pekerjaan', data_get($laporan, 'created_at'));
+                                        $tanggal = data_get($laporan, 'work_date', data_get($laporan, 'tanggal_pekerjaan', data_get($laporan, 'created_at')));
+                                        $namaTugasLaporan = data_get($laporan, 'task_name', data_get($laporan, 'task.name', data_get($laporan, 'nama_tugas', data_get($laporan, 'catatan', 'Laporan pekerjaan'))));
+                                        $statusLaporan = data_get($laporan, 'status_verification', data_get($laporan, 'status_verifikasi', data_get($laporan, 'status', 'Menunggu')));
                                     @endphp
                                     <tr>
                                         <td>{{ $tanggal ? \Illuminate\Support\Carbon::parse($tanggal)->format('d M Y') : '-' }}
                                         </td>
-                                        <td>{{ data_get($laporan, 'nama_tugas', data_get($laporan, 'tugas.nama_tugas', data_get($laporan, 'catatan', 'Laporan pekerjaan'))) }}
-                                        </td>
+                                        <td>{{ $namaTugasLaporan }}</td>
                                         <td><span class="status {{ $verified ? 'verified' : 'pending' }}"><i
-                                                    data-lucide="{{ $verified ? 'check-circle' : 'clock' }}"></i>{{ ucfirst((string) data_get($laporan, 'status_verifikasi', data_get($laporan, 'status', 'Menunggu'))) }}</span>
+                                                    data-lucide="{{ $verified ? 'check-circle' : 'clock' }}"></i>{{ ucfirst((string) $statusLaporan) }}</span>
                                         </td>
                                         <td><a class="view-btn" href="#" onclick="return false;" title="Detail laporan"><i
                                                     data-lucide="eye"></i></a></td>
