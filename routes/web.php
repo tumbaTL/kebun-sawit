@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\VerifikasiLaporanPekerjaanController;
+use App\Http\Controllers\LaporanPekerjaanController;
+use App\Http\Controllers\ArahanTugasController;
+use App\Http\Controllers\LaporanKeuanganController;
 use App\Http\Controllers\DashboardPemilikController;
 use App\Http\Controllers\KelolaJadwalController;
 use App\Http\Controllers\KelolaPerawatanController;
@@ -42,6 +46,27 @@ Route::post('/logout', [LoginController::class, 'logout'])
 */
 
 Route::middleware(['auth', 'role:staf'])->group(function () {
+
+     // Verifikasi laporan pekerjaan (khusus Staf Kebun)
+    Route::get('/dashboard/pemilik/verifikasi-laporan-pekerjaan', [
+        VerifikasiLaporanPekerjaanController::class,
+        'index',
+    ])->name('pemilik.verifikasi-laporan');
+
+    Route::post('/dashboard/pemilik/verifikasi-laporan-pekerjaan/{workReport}/setujui', [
+        VerifikasiLaporanPekerjaanController::class,
+        'approve',
+    ])->name('pemilik.verifikasi-laporan.approve');
+
+    Route::post('/dashboard/pemilik/verifikasi-laporan-pekerjaan/{workReport}/tolak', [
+        VerifikasiLaporanPekerjaanController::class,
+        'reject',
+    ])->name('pemilik.verifikasi-laporan.reject');
+
+    Route::get('/dashboard/pemilik/verifikasi-laporan-pekerjaan/{workReport}/foto/{photoIndex}', [
+        VerifikasiLaporanPekerjaanController::class,
+        'photo',
+    ])->whereNumber('photoIndex')->name('pemilik.verifikasi-laporan.foto');
 
     // Dashboard Staf
     Route::get('/dashboard/pemilik', [
@@ -145,14 +170,21 @@ Route::middleware(['auth', 'role:pekerja'])->group(function () {
     })->name('pekerja.dashboard');
 
     // Melihat Arahan Tugas
-    Route::get('/dashboard/pekerja/arahan-tugas', function () {
-        return view('dashboard.arahan-tugas');
-    })->name('pekerja.arahan-tugas');
+    Route::get('/dashboard/pekerja/arahan-tugas', [
+        ArahanTugasController::class,
+        'index',
+    ])->name('pekerja.arahan-tugas');
 
     // Laporan Pekerjaan
-    Route::get('/dashboard/pekerja/laporan-pekerjaan', function () {
-        return view('dashboard.laporan-pekerjaan');
-    })->name('pekerja.laporan-pekerjaan');
+    Route::get('/dashboard/pekerja/laporan-pekerjaan', [
+        LaporanPekerjaanController::class,
+        'index',
+    ])->name('pekerja.laporan-pekerjaan');
+
+    Route::post('/dashboard/pekerja/laporan-pekerjaan', [
+        LaporanPekerjaanController::class,
+        'store',
+    ])->name('pekerja.laporan-pekerjaan.store');
 
 });
 
@@ -166,8 +198,14 @@ Route::middleware(['auth', 'role:pekerja'])->group(function () {
 Route::middleware(['auth', 'role:pemilik'])->group(function () {
 
     // Laporan Keuangan
-    Route::get('/dashboard/pemilik/laporan-keuangan', function () {
-        return view('dashboard.keuangan');
-    })->name('pemilik.keuangan');
+    Route::get('/dashboard/pemilik/laporan-keuangan', [
+        LaporanKeuanganController::class,
+        'index',
+    ])->name('pemilik.keuangan');
+
+    Route::post('/dashboard/pemilik/laporan-keuangan', [
+        LaporanKeuanganController::class,
+        'store',
+    ])->name('pemilik.keuangan.store');
 
 });
