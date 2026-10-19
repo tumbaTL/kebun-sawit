@@ -1036,82 +1036,9 @@
 
 
 <body>
-
-
-
     @php
-
-        $tasks = [
-
-            [
-
-                'id' => '#TK-8821',
-
-                'name' => 'Pemupukan Rutin Block A1',
-
-                'detail' => 'NPK Standard - 250 trees',
-
-                'location' => 'Estate North, Block A1',
-
-                'date' => 'Oct 24, 2023',
-
-                'status' => 'In Progress',
-
-            ],
-
-            [
-
-                'id' => '#TK-8824',
-
-                'name' => 'Pembersihan Gulma',
-
-                'detail' => 'Area Drainase Timur',
-
-                'location' => 'Estate South, Block C4',
-
-                'date' => 'Oct 25, 2023',
-
-                'status' => 'Pending',
-
-            ],
-
-            [
-
-                'id' => '#TK-8819',
-
-                'name' => 'Inspeksi Hama',
-
-                'detail' => 'Early Warning System Check',
-
-                'location' => 'Estate West, Block B12',
-
-                'date' => 'Oct 22, 2023',
-
-                'status' => 'Completed',
-
-            ],
-
-            [
-
-                'id' => '#TK-8830',
-
-                'name' => 'Urgent: Perbaikan Irigasi',
-
-                'detail' => 'Main pipe leakage detection',
-
-                'location' => 'Estate Central, Pump St.',
-
-                'date' => 'Today',
-
-                'status' => 'Urgent',
-
-            ],
-
-        ];
-
+        $tasks = $tasks ?? [];
     @endphp
-
-
 
     {{-- SIDEBAR PEKERJA - sama dengan Dashboard Pekerja --}}
     <aside class="sidebar">
@@ -1212,7 +1139,7 @@
 
                     </div>
 
-                    <div class="stat-number">12</div>
+                    <div class="stat-number">{{ $totalTugas }}</div>
 
                     <div class="stat-caption">Total Assigned</div>
 
@@ -1230,7 +1157,7 @@
 
                     </div>
 
-                    <div class="stat-number">4</div>
+                    <div class="stat-number">{{ $sedangBerjalan }}</div>
 
                     <div class="stat-caption">In Progress</div>
 
@@ -1248,7 +1175,7 @@
 
                     </div>
 
-                    <div class="stat-number">2</div>
+                    <div class="stat-number">{{ $terlambat }}</div>
 
                     <div class="stat-caption">Overdue Tasks</div>
 
@@ -1266,7 +1193,7 @@
 
                     </div>
 
-                    <div class="stat-number">8</div>
+                    <div class="stat-number">{{ $selesai }}</div>
 
                     <div class="stat-caption">Completed Today</div>
 
@@ -1366,7 +1293,7 @@
 
                                         <div class="task-id">
 
-                                            {{ str_replace('-', '-<br>', $task['id']) }}
+                                            {{ $task['id'] }}
 
                                         </div>
 
@@ -1451,33 +1378,11 @@
 
                 <footer class="table-footer">
 
-                    <span id="taskCount">Showing 4 of 24 tasks</span>
+                    <span id="taskCount">Showing 0 of {{ count($tasks) }} tasks</span>
 
 
 
-                    <div class="pagination">
-
-                        <button class="page-button" type="button" aria-label="Halaman sebelumnya"
-                            onclick="changePage(-1)">
-
-                            <i class="fa-solid fa-chevron-left"></i>
-
-                        </button>
-
-                        <button class="page-button active" type="button" data-page="1">1</button>
-
-                        <button class="page-button" type="button" data-page="2">2</button>
-
-                        <button class="page-button" type="button" data-page="3">3</button>
-
-                        <button class="page-button" type="button" aria-label="Halaman berikutnya"
-                            onclick="changePage(1)">
-
-                            <i class="fa-solid fa-chevron-right"></i>
-
-                        </button>
-
-                    </div>
+                    <div class="pagination" id="pagination" aria-label="Navigasi halaman"></div>
 
                 </footer>
 
@@ -1492,147 +1397,114 @@
     <script>
 
         const taskRows = Array.from(document.querySelectorAll('.task-row'));
-
         const taskSearch = document.getElementById('taskSearch');
-
         const topSearch = document.getElementById('topSearch');
-
         const filterButtons = document.querySelectorAll('.filter-button');
-
-        const pageButtons = document.querySelectorAll('.page-button[data-page]');
-
         const emptyRow = document.getElementById('emptyRow');
-
         const taskCount = document.getElementById('taskCount');
+        const pagination = document.getElementById('pagination');
 
-
-
+        const perPage = 4;
         let selectedStatus = 'All';
-
         let currentPage = 1;
 
+        function getFilteredRows() {
+            const keywords = [taskSearch.value, topSearch.value]
+                .map(value => value.trim().toLowerCase())
+                .filter(Boolean);
 
+            return taskRows.filter(row => {
+                const rowText = row.textContent.toLowerCase();
+                const matchesText = keywords.every(keyword => rowText.includes(keyword));
+                const rowStatus = row.dataset.status || '';
+                const matchesStatus = selectedStatus === 'All' || rowStatus === selectedStatus;
+                return matchesText && matchesStatus;
+            });
+        }
 
-        function filterTasks() {
+        function renderPagination(totalPages) {
+            pagination.innerHTML = '';
 
-            const keyword = taskSearch.value.trim().toLowerCase();
+            const previous = document.createElement('button');
+            previous.type = 'button';
+            previous.className = 'page-button';
+            previous.setAttribute('aria-label', 'Halaman sebelumnya');
+            previous.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            previous.disabled = currentPage <= 1;
+            previous.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTasks();
+                }
+            });
+            pagination.appendChild(previous);
 
-            const topKeyword = topSearch.value.trim().toLowerCase();
+            for (let page = 1; page <= totalPages; page++) {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'page-button' + (page === currentPage ? ' active' : '');
+                button.textContent = String(page);
+                button.setAttribute('aria-label', `Halaman ${page}`);
+                button.addEventListener('click', () => {
+                    currentPage = page;
+                    renderTasks();
+                });
+                pagination.appendChild(button);
+            }
 
-            const combinedKeyword = [keyword, topKeyword].filter(Boolean).join(' ');
+            const next = document.createElement('button');
+            next.type = 'button';
+            next.className = 'page-button';
+            next.setAttribute('aria-label', 'Halaman berikutnya');
+            next.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            next.disabled = currentPage >= totalPages;
+            next.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTasks();
+                }
+            });
+            pagination.appendChild(next);
+        }
 
-
-
-            let visibleCount = 0;
-
-
+        function renderTasks() {
+            const filteredRows = getFilteredRows();
+            const totalPages = Math.max(1, Math.ceil(filteredRows.length / perPage));
+            currentPage = Math.min(currentPage, totalPages);
+            const start = (currentPage - 1) * perPage;
+            const pageRows = new Set(filteredRows.slice(start, start + perPage));
 
             taskRows.forEach(row => {
-
-                const matchesText = row\.textContent.toLowerCase().includes(combinedKeyword);
-
-                const rowStatus = row\.dataset.status;
-
-                const matchesStatus = selectedStatus === 'All'
-
-                    || rowStatus === selectedStatus;
-
-
-
-                const visible = matchesText && matchesStatus;
-
-                row\.style.display = visible ? '' : 'none';
-
-
-
-                if (visible) visibleCount++;
-
+                row.style.display = pageRows.has(row) ? '' : 'none';
             });
 
-
-
-            emptyRow\.style.display = visibleCount === 0 ? '' : 'none';
-
-            taskCount.textContent = \`Showing ${visibleCount} of 24 tasks\`;
-
+            emptyRow.style.display = filteredRows.length === 0 ? '' : 'none';
+            const first = filteredRows.length === 0 ? 0 : start + 1;
+            const last = Math.min(start + perPage, filteredRows.length);
+            taskCount.textContent = `Showing ${first}–${last} of ${filteredRows.length} tasks`;
+            renderPagination(totalPages);
         }
 
-
-
-        taskSearch.addEventListener('input', filterTasks);
-
-        topSearch.addEventListener('input', filterTasks);
-
-
+        taskSearch.addEventListener('input', () => {
+            currentPage = 1;
+            renderTasks();
+        });
+        topSearch.addEventListener('input', () => {
+            currentPage = 1;
+            renderTasks();
+        });
 
         filterButtons.forEach(button => {
-
             button.addEventListener('click', () => {
-
-                selectedStatus = button.dataset.status;
-
-
-
+                selectedStatus = button.dataset.status || 'All';
                 filterButtons.forEach(item => item.classList.remove('active'));
-
                 button.classList.add('active');
-
-
-
-                filterTasks();
-
+                currentPage = 1;
+                renderTasks();
             });
-
         });
 
-
-
-        function changePage(direction) {
-
-            const nextPage = Math.max(1, Math.min(3, currentPage + direction));
-
-            setPage(nextPage);
-
-        }
-
-
-
-        function setPage(page) {
-
-            currentPage = page;
-
-
-
-            pageButtons.forEach(button => {
-
-                button.classList.toggle(
-
-                    'active',
-
-                    Number(button.dataset.page) === currentPage
-
-                );
-
-            });
-
-        }
-
-
-
-        pageButtons.forEach(button => {
-
-            button.addEventListener('click', () => {
-
-                setPage(Number(button.dataset.page));
-
-            });
-
-        });
-
-
-
-        filterTasks();
-
+        renderTasks();
     </script>
 
 
