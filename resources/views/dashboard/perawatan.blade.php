@@ -917,6 +917,10 @@
                     class="menu-item {{ request()->routeIs('pemilik.jadwal') ? 'active' : '' }}">
                     <i data-lucide="calendar-days"></i><span>Kelola Jadwal</span>
                 </a>
+                <a href="{{ route('pemilik.verifikasi-laporan') }}"
+                    class="menu-item {{ request()->routeIs('pemilik.verifikasi-laporan*') ? 'active' : '' }}">
+                    <i data-lucide="clipboard-check"></i><span>Verifikasi Laporan</span>
+                </a>
             @elseif (auth()->user()->role === 'pemilik')
                 <a href="{{ route('pemilik.keuangan') }}"
                     class="menu-item {{ request()->routeIs('pemilik.keuangan') ? 'active' : '' }}">

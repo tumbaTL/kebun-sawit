@@ -931,7 +931,17 @@
                             data-lucide="archive"></i><span>Kelola Perawatan</span></a>
                     <a href="{{ route('pemilik.jadwal') }}"
                         class="menu-item {{ request()->routeIs('pemilik.jadwal') ? 'active' : '' }}"><i
-                            data-lucide="calendar-days"></i><span>Kelola Jadwal</span></a>
+                            data-lucide="calendar-days"></i><span>Kelola Jadwal</span>
+                    </a>
+
+                    <a href="{{ route('pemilik.verifikasi-laporan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.verifikasi-laporan*') ? 'active' : '' }}">
+
+                        <i data-lucide="clipboard-check"></i>
+
+                        <span>Verifikasi Laporan</span>
+                    </a>
+
                 @elseif (auth()->user()->role === 'pemilik')
                     <a href="{{ route('pemilik.keuangan') }}"
                         class="menu-item {{ request()->routeIs('pemilik.keuangan') ? 'active' : '' }}"><i
@@ -1066,7 +1076,8 @@
                                             <option value="">Pilih pekerja</option>
                                             @foreach ($workers as $worker)
                                                 <option value="{{ $worker->id }}" @selected((string) old('worker_id', $selectedSchedule?->worker_id ?? '') === (string) $worker->id)>
-                                                    {{ $worker->name }}</option>
+                                                    {{ $worker->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         @error('worker_id')

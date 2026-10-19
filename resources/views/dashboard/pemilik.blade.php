@@ -1367,7 +1367,14 @@
                         <i data-lucide="calendar"></i>
 
                         <span>Kelola Jadwal</span>
+                    </a>
 
+                    <a href="{{ route('pemilik.verifikasi-laporan') }}"
+                        class="menu-item {{ request()->routeIs('pemilik.verifikasi-laporan*') ? 'active' : '' }}">
+
+                        <i data-lucide="clipboard-check"></i>
+
+                        <span>Verifikasi Laporan</span>
                     </a>
 
                 @elseif (auth()->user()->role === 'pemilik')
@@ -1815,7 +1822,8 @@
                                         {{ $activity['activity'] }}
                                         @if (!empty($activity['location']))
                                             <div style="font-size:9px;font-weight:400;color:#687168;">
-                                                {{ $activity['location'] }}</div>
+                                                {{ $activity['location'] }}
+                                            </div>
                                         @endif
                                     </td>
                                     <td>
