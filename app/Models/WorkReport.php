@@ -15,6 +15,7 @@ class WorkReport extends Model
         'task_location',
         'work_date',
         'notes',
+        'harvest_tons',
         'photo_paths',
         'status_verification',
         'verified_by',

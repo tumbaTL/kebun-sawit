@@ -23,9 +23,18 @@ class LaporanPekerjaanController extends Controller
         $tugas = (clone $assignedTasks)
             ->orderBy('deadline')
             ->orderBy('task_code')
-            ->get(['id', 'task_code', 'name', 'location', 'start_date', 'deadline', 'status']);
+            ->get([
+                'id',
+                'task_code',
+                'name',
+                'location',
+                'start_date',
+                'deadline',
+                'status',
+            ]);
 
         $totalTugas = (clone $assignedTasks)->count();
+
         $tugasSelesai = (clone $assignedTasks)
             ->where('status', 'Selesai')
             ->count();
@@ -58,21 +67,44 @@ class LaporanPekerjaanController extends Controller
                 'regex:/^REP-[A-Za-z0-9-]+$/',
                 'unique:work_reports,report_code',
             ],
-            'tanggal_pekerjaan' => ['required', 'date', 'before_or_equal:today'],
+            'tanggal_pekerjaan' => [
+                'required',
+                'date',
+                'before_or_equal:today',
+            ],
             'tugas_id' => [
                 'required',
                 'integer',
                 Rule::exists('work_tasks', 'id')->where(
-                    fn ($query) => $query->where('worker_id', $workerId)
+                    fn($query) => $query->where('worker_id', $workerId)
                 ),
             ],
-            'catatan' => ['required', 'string', 'max:10000'],
-            'foto' => ['nullable', 'array', 'max:3'],
-            'foto.*' => ['image', 'mimes:jpg,jpeg,png', 'max:5120'],
+            'catatan' => [
+                'required',
+                'string',
+                'max:10000',
+            ],
+            'harvest_tons' => [
+                'nullable',
+                'numeric',
+                'gt:0',
+            ],
+            'foto' => [
+                'nullable',
+                'array',
+                'max:3',
+            ],
+            'foto.*' => [
+                'image',
+                'mimes:jpg,jpeg,png',
+                'max:5120',
+            ],
         ], [
             'id_laporan.unique' => 'ID laporan ini sudah digunakan. Muat ulang halaman lalu coba lagi.',
             'tanggal_pekerjaan.before_or_equal' => 'Tanggal pekerjaan tidak boleh di masa depan.',
             'tugas_id.exists' => 'Tugas yang dipilih tidak ditugaskan kepada akun Anda.',
+            'harvest_tons.numeric' => 'Jumlah hasil panen harus berupa angka dalam satuan ton.',
+            'harvest_tons.gt' => 'Jumlah hasil panen harus lebih besar dari 0 ton.',
             'foto.max' => 'Maksimal 3 foto untuk satu laporan.',
             'foto.*.image' => 'Semua file yang diunggah harus berupa gambar.',
             'foto.*.mimes' => 'Foto harus berformat JPG atau PNG.',
@@ -83,16 +115,36 @@ class LaporanPekerjaanController extends Controller
             ->where('worker_id', $workerId)
             ->findOrFail((int) $validated['tugas_id']);
 
-        // File foto disimpan di disk lokal, bukan sebagai binary/blob di database.
-        // Database hanya menyimpan array path relatif pada kolom photo_paths.
+        // Mengenali tugas panen berdasarkan nama tugas.
+        $isHarvestTask = Str::contains(
+            Str::lower($task->name),
+            ['panen', 'pemanenan']
+        );
+
+        // Jumlah hasil panen wajib diisi untuk tugas panen.
+        if ($isHarvestTask && !$request->filled('harvest_tons')) {
+            return back()
+                ->withErrors([
+                    'harvest_tons' => 'Jumlah hasil panen wajib diisi untuk tugas panen.',
+                ])
+                ->withInput();
+        }
+
+        // Foto tetap disimpan pada disk lokal.
+        // Database menyimpan path foto, bukan file gambar secara langsung.
         $savedPaths = [];
 
         try {
             foreach ($request->file('foto', []) as $photo) {
-                $path = $photo->store('laporan-pekerjaan/' . $workerId, 'local');
+                $path = $photo->store(
+                    'laporan-pekerjaan/' . $workerId,
+                    'local'
+                );
 
                 if (!$path) {
-                    throw new \RuntimeException('Foto gagal disimpan ke folder penyimpanan.');
+                    throw new \RuntimeException(
+                        'Foto gagal disimpan ke folder penyimpanan.'
+                    );
                 }
 
                 $savedPaths[] = $path;
@@ -106,6 +158,12 @@ class LaporanPekerjaanController extends Controller
                 'task_location' => $task->location,
                 'work_date' => $validated['tanggal_pekerjaan'],
                 'notes' => $validated['catatan'],
+
+                // Simpan tonase hanya untuk laporan tugas panen.
+                'harvest_tons' => $isHarvestTask
+                    ? $validated['harvest_tons']
+                    : null,
+
                 'photo_paths' => $savedPaths ?: null,
                 'status_verification' => 'Menunggu',
             ]);
@@ -119,14 +177,21 @@ class LaporanPekerjaanController extends Controller
 
         return redirect()
             ->route('pekerja.laporan-pekerjaan')
-            ->with('success', 'Laporan ' . $validated['id_laporan'] . ' berhasil dikirim.');
+            ->with(
+                'success',
+                'Laporan ' . $validated['id_laporan'] . ' berhasil dikirim.'
+            );
     }
 
     private function generateReportCode(): string
     {
         do {
             $code = 'REP-' . now()->format('Ymd') . '-' . Str::upper(Str::random(4));
-        } while (WorkReport::query()->where('report_code', $code)->exists());
+        } while (
+            WorkReport::query()
+                ->where('report_code', $code)
+                ->exists()
+        );
 
         return $code;
     }

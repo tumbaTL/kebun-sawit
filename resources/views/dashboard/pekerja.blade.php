@@ -647,55 +647,21 @@
             }
         }
     </style>
+
+<link rel="stylesheet" href="{{ asset('css/staff-background.css') }}">
+
 </head>
 
 <body>
     @php
         $namaPekerja = auth()->user()->name ?? 'Pekerja';
-        $namaDepan = explode(' ', trim($namaPekerja))[0];
+        $namaDepan = explode(' ', trim($namaPekerja))[0] ?: 'Pekerja';
 
-        /*
-         * DATA CONTOH:
-         * Ganti dengan data database saat fitur tugas sudah terhubung.
-         */
-        $tugas = [
-            [
-                'id' => 'TGS-10224',
-                'jenis' => 'Pemangkasan Pelepah',
-                'lokasi' => 'Blok C12 - Barat',
-                'deadline' => '14:00 WIB',
-                'status' => 'Selesai',
-                'class' => 'selesai',
-            ],
-            [
-                'id' => 'TGS-10225',
-                'jenis' => 'Pemupukan Organik',
-                'lokasi' => 'Blok D05 - Tengah',
-                'deadline' => '17:00 WIB',
-                'status' => 'Berjalan',
-                'class' => 'berjalan',
-            ],
-            [
-                'id' => 'TGS-10226',
-                'jenis' => 'Pengecekan Hama',
-                'lokasi' => 'Blok B08 - Utara',
-                'deadline' => 'Besok, 08:00',
-                'status' => 'Menunggu',
-                'class' => 'menunggu',
-            ],
-            [
-                'id' => 'TGS-10227',
-                'jenis' => 'Panen TBS',
-                'lokasi' => 'Blok A01 - Selatan',
-                'deadline' => 'TERLEWAT',
-                'status' => 'Terlambat',
-                'class' => 'terlambat',
-            ],
-        ];
-
-        $jumlahTugas = 12;
-        $jumlahSelesai = 8;
-        $jumlahBelumSelesai = 4;
+        // Data sekarang berasal dari DashboardPekerjaController.
+        $tugas = $tugas ?? [];
+        $jumlahTugas = $jumlahTugas ?? 0;
+        $jumlahSelesai = $jumlahSelesai ?? 0;
+        $jumlahBelumSelesai = $jumlahBelumSelesai ?? 0;
     @endphp
 
     <aside class="sidebar">

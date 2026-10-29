@@ -580,6 +580,9 @@
             }
         }
     </style>
+
+<link rel="stylesheet" href="{{ asset('css/staff-background.css') }}">
+
 </head>
 
 <body>
@@ -615,6 +618,19 @@
                         data-lucide="calendar"></i><span>Kelola Jadwal</span></a>
                 <a href="{{ route('pemilik.verifikasi-laporan') }}" class="menu-item active"><i
                         data-lucide="clipboard-check"></i><span>Verifikasi Laporan</span></a>
+
+                <a href="{{ route('staf.penjualan') }}"
+                    class="menu-item {{ request()->routeIs('staf.penjualan*') ? 'active' : '' }}">
+                    <i data-lucide="chart-no-axes-combined"></i>
+                    <span>Laporan Penjualan</span>
+                </a>
+
+                <a href="{{ route('staf.hasil-penjualan') }}"
+                    class="menu-item {{ request()->routeIs('staf.hasil-penjualan') ? 'active' : '' }}">
+                    <i data-lucide="factory"></i>
+                    <span>Hasil Penjualan ke Pabrik</span>
+                </a>
+
             </nav>
             <div class="sidebar-bottom">
                 <div class="sidebar-divider"></div>

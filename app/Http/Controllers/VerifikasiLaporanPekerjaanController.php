@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\WorkTask;
 use App\Models\WorkReport;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -43,6 +44,7 @@ class VerifikasiLaporanPekerjaanController extends Controller
 
             $note = trim((string) ($validated['catatan_verifikasi'] ?? ''));
 
+
             $report->update([
                 'status_verification' => 'Disetujui',
                 'verified_by' => $request->user()->id,
@@ -50,7 +52,18 @@ class VerifikasiLaporanPekerjaanController extends Controller
                 'verification_notes' => $note !== '' ? $note : null,
             ]);
 
+            // Jika laporan disetujui, tandai tugas terkait sebagai selesai.
+            if ($report->work_task_id !== null) {
+                WorkTask::query()
+                    ->whereKey($report->work_task_id)
+                    ->update([
+                        'status' => 'Selesai',
+                        'updated_at' => now(),
+                    ]);
+            }
+
             return true;
+
         });
 
         if (!$updated) {

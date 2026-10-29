@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * {
@@ -24,13 +25,14 @@
 
         body {
             margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f8f9f7;
-            color: var(--text);
+            min-height: 100%;
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f8f9f8;
+            color: #242824;
             font-size: 12px;
         }
 
-        /* SIDEBAR: disamakan dengan halaman Arahan Tugas */
+        /* Sidebar disamakan dengan resources/views/dashboard/arahan-tugas.blade.php */
         .sidebar {
             position: fixed;
             inset: 0 auto 0 0;
@@ -105,8 +107,7 @@
             padding: 12px 10px;
         }
 
-        .sidebar-bottom a,
-        .sidebar-bottom button {
+        .sidebar-bottom a {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -594,6 +595,9 @@
             }
         }
     </style>
+
+<link rel="stylesheet" href="{{ asset('css/staff-background.css') }}">
+
 </head>
 
 <body>
@@ -605,8 +609,6 @@
         $arahanRoute = \Illuminate\Support\Facades\Route::has('pekerja.arahan-tugas')
             ? route('pekerja.arahan-tugas') : url('/dashboard/pekerja/arahan-tugas');
         $logoutRoute = \Illuminate\Support\Facades\Route::has('logout') ? route('logout') : url('/logout');
-        $laporanStoreRoute = \Illuminate\Support\Facades\Route::has('pekerja.laporan-pekerjaan.store')
-            ? route('pekerja.laporan-pekerjaan.store') : $laporanRoute;
         $riwayat = $riwayat ?? collect();
         $tugas = $tugas ?? collect();
         $totalTugas = isset($totalTugas) ? (int) $totalTugas : $tugas->count();
@@ -619,39 +621,26 @@
             <h2>Sihombing Group</h2>
             <p>Dashboard Pekerja</p>
         </div>
-
         <nav class="menu">
             <a href="{{ $dashboardRoute }}" class="{{ request()->routeIs('pekerja.dashboard') ? 'active' : '' }}">
-                <i data-lucide="layout-dashboard"></i>
-                <span>Dashboard</span>
+                <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
             </a>
-
             <a href="{{ $arahanRoute }}" class="{{ request()->routeIs('pekerja.arahan-tugas') ? 'active' : '' }}">
-                <i data-lucide="clipboard-list"></i>
-                <span>Arahan Tugas</span>
+                <i data-lucide="clipboard-list"></i><span>Arahan Tugas</span>
             </a>
-
             <a href="{{ $laporanRoute }}" class="{{ request()->routeIs('pekerja.laporan-pekerjaan') ? 'active' : '' }}">
-                <i data-lucide="file-text"></i>
-                <span>Laporan Pekerjaan</span>
+                <i data-lucide="file-text"></i><span>Laporan Pekerjaan</span>
             </a>
         </nav>
-
         <div class="sidebar-bottom">
             <a href="#" onclick="alert('Silakan hubungi administrator untuk bantuan.'); return false;">
-                <i data-lucide="circle-help"></i>
-                <span>Support</span>
+                <i data-lucide="circle-help"></i><span>Support</span>
             </a>
-
             <a href="{{ $logoutRoute }}" class="logout"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i data-lucide="log-out"></i>
-                <span>Logout</span>
+                <i data-lucide="log-out"></i><span>Logout</span>
             </a>
-
-            <form id="logout-form" action="{{ $logoutRoute }}" method="POST" style="display:none;">
-                @csrf
-            </form>
+            <form id="logout-form" action="{{ $logoutRoute }}" method="POST" style="display:none">@csrf</form>
         </div>
     </aside>
 
@@ -685,13 +674,13 @@
 
             <div class="page-layout">
                 <section class="panel form-panel">
-                    <form action="{{ $laporanStoreRoute }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ $laporanRoute }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-grid">
                             <div class="field">
                                 <label for="id_laporan">ID Laporan</label>
                                 <input type="text" id="id_laporan" name="id_laporan"
-                                    value="{{ old('id_laporan', $reportCode ?? ('REP-' . now()->format('Ymd') . '-' . str_pad((string) random_int(1, 9999), 4, '0', STR_PAD_LEFT))) }}"
+                                    value="{{ old('id_laporan', 'REP-' . now()->format('Ymd') . '-' . str_pad((string) random_int(1, 9999), 4, '0', STR_PAD_LEFT)) }}"
                                     readonly>
                             </div>
                             <div class="field">
@@ -703,12 +692,19 @@
                                 <label for="tugas_id">Pilih Tugas</label>
                                 <select id="tugas_id" name="tugas_id" required>
                                     <option value="">-- Pilih Tugas Sesuai Jadwal --</option>
-                                    @foreach ($tugas as $item)
+                                    @forelse ($tugas as $item)
                                         <option value="{{ data_get($item, 'id') }}" @selected((string) old('tugas_id') === (string) data_get($item, 'id'))>
-                                            {{ data_get($item, 'name', data_get($item, 'nama_tugas', data_get($item, 'jenis_tugas', 'Tugas'))) }}@if(data_get($item, 'location', data_get($item, 'lokasi')))
-                                            — {{ data_get($item, 'location', data_get($item, 'lokasi')) }}@endif
+                                            {{ data_get($item, 'task_code') ? data_get($item, 'task_code') . ' — ' : '' }}{{ data_get($item, 'name', data_get($item, 'nama_tugas', data_get($item, 'jenis_tugas', 'Tugas tanpa nama'))) }}@if(data_get($item, 'location', data_get($item, 'lokasi')))
+                                                — {{ data_get($item, 'location', data_get($item, 'lokasi')) }}
+                                            @endif
+                                            @if(data_get($item, 'deadline'))
+                                                (Batas:
+                                                {{ \Illuminate\Support\Carbon::parse(data_get($item, 'deadline'))->format('d M Y') }})
+                                            @endif
                                         </option>
-                                    @endforeach
+                                    @empty
+                                        <option value="" disabled>Belum ada tugas yang ditugaskan kepada Anda</option>
+                                    @endforelse
                                 </select>
                             </div>
                             <div class="field full">
@@ -777,18 +773,22 @@
                             <tbody>
                                 @foreach ($riwayat as $laporan)
                                     @php
-                                        $status = strtolower((string) data_get($laporan, 'status_verification', data_get($laporan, 'status_verifikasi', data_get($laporan, 'status', 'menunggu'))));
-                                        $verified = in_array($status, ['terverifikasi', 'verified', 'disetujui', 'selesai']);
+                                        $statusText = (string) data_get($laporan, 'status_verification', data_get($laporan, 'status_verifikasi', data_get($laporan, 'status', 'Menunggu')));
+                                        $status = \Illuminate\Support\Str::lower($statusText);
+                                        $verified = in_array($status, ['terverifikasi', 'verified', 'disetujui', 'approved']);
                                         $tanggal = data_get($laporan, 'work_date', data_get($laporan, 'tanggal_pekerjaan', data_get($laporan, 'created_at')));
-                                        $namaTugasLaporan = data_get($laporan, 'task_name', data_get($laporan, 'task.name', data_get($laporan, 'nama_tugas', data_get($laporan, 'catatan', 'Laporan pekerjaan'))));
-                                        $statusLaporan = data_get($laporan, 'status_verification', data_get($laporan, 'status_verifikasi', data_get($laporan, 'status', 'Menunggu')));
+                                        $namaTugas = data_get($laporan, 'task.name')
+                                            ?: data_get($laporan, 'task_name')
+                                            ?: data_get($laporan, 'nama_tugas')
+                                            ?: data_get($laporan, 'tugas.nama_tugas')
+                                            ?: 'Laporan pekerjaan';
                                     @endphp
                                     <tr>
                                         <td>{{ $tanggal ? \Illuminate\Support\Carbon::parse($tanggal)->format('d M Y') : '-' }}
                                         </td>
-                                        <td>{{ $namaTugasLaporan }}</td>
+                                        <td>{{ $namaTugas }}</td>
                                         <td><span class="status {{ $verified ? 'verified' : 'pending' }}"><i
-                                                    data-lucide="{{ $verified ? 'check-circle' : 'clock' }}"></i>{{ ucfirst((string) $statusLaporan) }}</span>
+                                                    data-lucide="{{ $verified ? 'check-circle' : 'clock' }}"></i>{{ $statusText }}</span>
                                         </td>
                                         <td><a class="view-btn" href="#" onclick="return false;" title="Detail laporan"><i
                                                     data-lucide="eye"></i></a></td>
