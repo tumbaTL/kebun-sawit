@@ -1,0 +1,38 @@
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    background-image:
+        linear-gradient(
+            rgba(248, 250, 248, 0.72),
+            rgba(248, 250, 248, 0.72)
+        ),
+        url("../images/staff-background.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.app,
+.main,
+main,
+.content,
+.page-content,
+.dashboard-content {
+    background-color: transparent !important;
+}
+
+.sidebar {
+    background-color: #ffffff;
+}
+
+.card,
+.form-card,
+.history-card,
+table {
+    background-color: #ffffff;
+}

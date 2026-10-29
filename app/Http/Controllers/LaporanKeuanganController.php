@@ -2,97 +2,131 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FinancialTransaction;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Models\Sale;
 
 class LaporanKeuanganController extends Controller
 {
-    public function index(Request $request): View
+    public function index()
     {
-        $selectedMonth = (string) $request->query('month', now()->format('Y-m'));
-        if ($selectedMonth !== 'all' && !preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $selectedMonth)) {
-            $selectedMonth = now()->format('Y-m');
+        // Filter bulan yang dipilih pada halaman laporan.
+        $selectedMonth = request()->query('month', 'all');
+
+        // Validasi format bulan.
+        if (
+            !is_string($selectedMonth) ||
+            (
+                $selectedMonth !== 'all' &&
+                !preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $selectedMonth)
+            )
+        ) {
+            $selectedMonth = 'all';
         }
 
-        $transactions = FinancialTransaction::query()
-            ->orderByDesc('transaction_date')
+        // Nama bulan dalam bahasa Indonesia.
+        $monthNames = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+        ];
+
+        // Ambil daftar bulan yang tersedia.
+        $availableMonths = Sale::query()
+            ->selectRaw("DATE_FORMAT(sale_date, '%Y-%m') AS month")
+            ->distinct()
+            ->orderByDesc('month')
+            ->pluck('month');
+
+        // Siapkan pilihan bulan untuk halaman Blade.
+        $monthOptions = $availableMonths->map(
+            function ($month) use ($monthNames) {
+                $monthNumber = (int) substr($month, 5, 2);
+                $year = substr($month, 0, 4);
+
+                return [
+                    'value' => $month,
+                    'label' => $monthNames[$monthNumber] . ' ' . $year,
+                ];
+            }
+        )->values()->all();
+
+        // Ambil data penjualan.
+        $query = Sale::with('creator');
+
+        // Terapkan filter bulan.
+        if ($selectedMonth !== 'all') {
+            $year = (int) substr($selectedMonth, 0, 4);
+            $month = (int) substr($selectedMonth, 5, 2);
+
+            $query->whereYear('sale_date', $year)
+                ->whereMonth('sale_date', $month);
+        }
+
+        $sales = $query
+            ->orderByDesc('sale_date')
             ->orderByDesc('id')
             ->get();
 
-        $monthKeys = $transactions
-            ->map(fn(FinancialTransaction $transaction) => $transaction->transaction_date->format('Y-m'))
-            ->push(now()->format('Y-m'));
+        // Hitung total berdasarkan data yang ditampilkan.
+        $totalSales = $sales->sum(
+            fn($sale) => (float) $sale->total_amount
+        );
 
-        if ($selectedMonth !== 'all') {
-            $monthKeys->push($selectedMonth);
-        }
+        $totalTons = $sales->sum(
+            fn($sale) => (float) $sale->weight_tons
+        );
 
-        $monthOptions = $monthKeys
-            ->toBase()
-            ->unique()
-            ->sortDesc()
-            ->values()
-            ->map(fn(string $month) => [
-                'value' => $month,
-                'label' => \Carbon\Carbon::createFromFormat('!Y-m', $month)->format('F Y'),
-            ])
-            ->all();
+        $paidSales = $sales
+            ->where('status', 'Lunas')
+            ->sum(fn($sale) => (float) $sale->total_amount);
 
-        $periodTransactions = $transactions->filter(function (FinancialTransaction $transaction) use ($selectedMonth) {
-            return $selectedMonth === 'all'
-                || $transaction->transaction_date->format('Y-m') === $selectedMonth;
-        });
+        $unpaidSales = $sales
+            ->where('status', 'Belum Lunas')
+            ->sum(fn($sale) => (float) $sale->total_amount);
 
-        $initialTotals = [
-            'income' => (float) $periodTransactions->sum('income'),
-            'expense' => (float) $periodTransactions->sum('expense'),
-        ];
-        $initialTotals['balance'] = $initialTotals['income'] - $initialTotals['expense'];
+        $partialSales = $sales
+            ->where('status', 'Sebagian Lunas')
+            ->sum(fn($sale) => (float) $sale->total_amount);
 
-        $transactionData = $transactions->map(fn(FinancialTransaction $transaction) => [
-            'id' => $transaction->id,
-            'date' => $transaction->transaction_date->format('Y-m-d'),
-            'description' => $transaction->description,
-            'income' => (float) $transaction->income,
-            'expense' => (float) $transaction->expense,
-            'status' => $transaction->status,
-        ])->values();
+        // Sesuaikan nama variabel dengan halaman Blade.
+        $paidAmount = $paidSales;
+        $unpaidAmount = $unpaidSales;
+        $partialAmount = $partialSales;
 
-        return view('dashboard.keuangan', compact(
-            'transactions',
-            'transactionData',
-            'monthOptions',
+        // Variabel ringkasan tambahan untuk tampilan.
+        $totalPenjualan = $totalSales;
+        $totalAmount = $totalSales;
+        $totalTonase = $totalTons;
+        $belumLunas = $unpaidSales;
+        $jumlahPenjualan = $sales->count();
+
+        // Pemilik hanya melihat laporan penjualan.
+        // Pemilik hanya melihat laporan penjualan.
+        return view('dashboard.penjualan-pemilik', compact(
+            'sales',
             'selectedMonth',
-            'initialTotals',
+            'monthOptions',
+            'totalSales',
+            'totalTons',
+            'paidSales',
+            'unpaidSales',
+            'partialSales',
+            'totalPenjualan',
+            'totalAmount',
+            'totalTonase',
+            'belumLunas',
+            'jumlahPenjualan',
+            'paidAmount',
+            'unpaidAmount',
+            'partialAmount'
         ));
-    }
-
-    public function store(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'transaction_date' => ['required', 'date'],
-            'description' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'in:income,expense'],
-            'amount' => ['required', 'numeric', 'min:0.01', 'max:9999999999999.99'],
-            'status' => ['required', 'in:Lunas,Pending'],
-        ]);
-
-        $amount = (float) $validated['amount'];
-        $isIncome = $validated['type'] === 'income';
-
-        FinancialTransaction::create([
-            'transaction_date' => $validated['transaction_date'],
-            'description' => $validated['description'],
-            'income' => $isIncome ? $amount : 0,
-            'expense' => $isIncome ? 0 : $amount,
-            'status' => $validated['status'],
-            'created_by' => $request->user()->id,
-        ]);
-
-        return redirect()
-            ->route('pemilik.keuangan', ['month' => substr($validated['transaction_date'], 0, 7)])
-            ->with('success', 'Transaksi berhasil disimpan.');
     }
 }

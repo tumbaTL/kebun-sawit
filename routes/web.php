@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\LaporanPenjualanStafController;
+use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\DashboardPekerjaController;
 use App\Http\Controllers\VerifikasiLaporanPekerjaanController;
 use App\Http\Controllers\LaporanPekerjaanController;
 use App\Http\Controllers\ArahanTugasController;
@@ -152,6 +155,23 @@ Route::middleware(['auth', 'role:staf'])->group(function () {
         'destroy'
     ])->name('pemilik.jadwal.destroy');
 
+    
+    // Laporan Penjualan - khusus Staf
+    Route::get('/dashboard/staf/laporan-penjualan', [
+        LaporanPenjualanStafController::class,
+        'index',
+    ])->name('staf.penjualan');
+
+    Route::post('/dashboard/staf/laporan-penjualan', [
+        LaporanPenjualanStafController::class,
+        'store',
+    ])->name('staf.penjualan.store');
+
+    // Rekap hasil penjualan ke pabrik setiap 14 hari panen
+    Route::get('/dashboard/staf/hasil-penjualan-pabrik', [
+        LaporanPenjualanStafController::class,
+        'factoryResults',
+    ])->name('staf.hasil-penjualan');
 
 });
 
@@ -165,9 +185,10 @@ Route::middleware(['auth', 'role:staf'])->group(function () {
 Route::middleware(['auth', 'role:pekerja'])->group(function () {
 
     // Dashboard Pekerja
-    Route::get('/dashboard/pekerja', function () {
-        return view('dashboard.pekerja');
-    })->name('pekerja.dashboard');
+    Route::get('/dashboard/pekerja', [
+        DashboardPekerjaController::class,
+        'index',
+    ])->name('pekerja.dashboard');
 
     // Melihat Arahan Tugas
     Route::get('/dashboard/pekerja/arahan-tugas', [
@@ -188,24 +209,19 @@ Route::middleware(['auth', 'role:pekerja'])->group(function () {
 
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | KHUSUS PEMILIK KEBUN
 |--------------------------------------------------------------------------
-| Pemilik melihat laporan keuangan.
+| Pemilik hanya melihat laporan penjualan.
 */
 
 Route::middleware(['auth', 'role:pemilik'])->group(function () {
 
-    // Laporan Keuangan
     Route::get('/dashboard/pemilik/laporan-keuangan', [
         LaporanKeuanganController::class,
         'index',
     ])->name('pemilik.keuangan');
-
-    Route::post('/dashboard/pemilik/laporan-keuangan', [
-        LaporanKeuanganController::class,
-        'store',
-    ])->name('pemilik.keuangan.store');
 
 });
