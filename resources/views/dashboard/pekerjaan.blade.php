@@ -1590,6 +1590,8 @@
         }
     </style>
 
+<link rel="stylesheet" href="{{ asset('css/staff-background.css') }}">
+
 </head>
 
 <body>
@@ -1677,6 +1679,19 @@
                         <span>Verifikasi Laporan</span>
 
                     </a>
+
+                    <a href="{{ route('staf.penjualan') }}"
+                        class="menu-item {{ request()->routeIs('staf.penjualan*') ? 'active' : '' }}">
+                        <i data-lucide="chart-no-axes-combined"></i>
+                        <span>Laporan Penjualan</span>
+                    </a>
+
+                    <a href="{{ route('staf.hasil-penjualan') }}"
+                        class="menu-item {{ request()->routeIs('staf.hasil-penjualan') ? 'active' : '' }}">
+                        <i data-lucide="factory"></i>
+                        <span>Hasil Penjualan ke Pabrik</span>
+                    </a>
+
 
                 @elseif (auth()->user()->role === 'pemilik')
 
@@ -2208,7 +2223,8 @@
                                         <td>
                                             <div class="task-name">{{ $task->name }}</div>
                                             <div class="worker">Pekerja:
-                                                {{ $task->worker->name ?? 'Akun pekerja tidak tersedia' }}</div>
+                                                {{ $task->worker->name ?? 'Akun pekerja tidak tersedia' }}
+                                            </div>
                                         </td>
                                         <td>
                                             <div class="location">
