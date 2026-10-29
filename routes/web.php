@@ -43,6 +43,41 @@ Route::post('/logout', [LoginController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
+| LUPA PASSWORD
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('guest')->group(function () {
+
+    // Halaman lupa password
+    Route::get('/forgot-password', [
+        PasswordResetController::class,
+        'create'
+    ])->name('password.request');
+
+    // Mengirim tautan pemulihan ke email
+    Route::post('/forgot-password', [
+        PasswordResetController::class,
+        'sendResetLinkEmail'
+    ])->name('password.email');
+
+    // Halaman membuat password baru
+    Route::get('/reset-password/{token}', [
+        PasswordResetController::class,
+        'showResetForm'
+    ])->name('password.reset');
+
+    // Menyimpan password baru
+    Route::post('/reset-password', [
+        PasswordResetController::class,
+        'reset'
+    ])->name('password.update');
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
 | KHUSUS STAF
 |--------------------------------------------------------------------------
 | Staf mengelola pekerjaan, data pohon, perawatan, dan jadwal.
