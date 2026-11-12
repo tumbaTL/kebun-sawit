@@ -1131,6 +1131,11 @@
                 Kelola dan lacak tugas pemeliharaan perkebunan yang ditugaskan kepada Anda.
 
             </p>
+            @if (session('success'))
+                <div style="margin-top:12px; padding:10px 14px; border-radius:8px; background:#e1f3e3; border:1px solid #08752b; color:#08752b; font-size:11px; font-weight:600;">
+                    {{ session('success') }}
+                </div>
+            @endif
 
 
 
@@ -1237,6 +1242,8 @@
                         <button type="button" class="filter-button" data-status="In Progress">In Progress</button>
 
                         <button type="button" class="filter-button" data-status="Completed">Completed</button>
+
+                        <button type="button" class="filter-button" data-status="Urgent">Urgent</button>
 
                     </div>
 
@@ -1353,16 +1360,24 @@
 
 
                                     <td>
-
-                                        <button type="button" class="detail-button"
-
-                                            onclick="alert('Detail tugas {{ $task['id'] }}')">
-
-                                            Detail
-
-                                        </button>
-
+                                        @if (($task['raw_status'] ?? '') === 'Belum Dimulai')
+                                            <form action="{{ route('pekerja.arahan-tugas.start', $task['raw_id']) }}" method="POST" style="margin:0;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="detail-button" style="background:#08752b; color:#fff;">
+                                                    Mulai
+                                                </button>
+                                            </form>
+                                        @elseif (($task['raw_status'] ?? '') !== 'Selesai')
+                                            <a href="{{ route('pekerja.laporan-pekerjaan') }}" class="detail-button">
+                                                Lapor
+                                            </a>
+                                        @else
+                                            <span style="font-size:9px; color:#176f2c; font-weight:600;">Selesai</span>
+                                        @endif
                                     </td>
+
+
 
                                 </tr>
 

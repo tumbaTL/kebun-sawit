@@ -49,6 +49,8 @@ class ArahanTugasController extends Controller
                 };
 
                 return [
+                    'raw_id' => $task->id,
+                    'raw_status' => $task->status,
                     'id' => '#' . $task->task_code,
                     'name' => $task->name,
                     'detail' => $task->description ?: 'Tidak ada deskripsi tambahan',
@@ -66,5 +68,15 @@ class ArahanTugasController extends Controller
             'terlambat',
             'selesai'
         ));
+    }
+    //untuk mengubah status tugas milik pekerja
+    public function start(Request $request, WorkTask $task){
+        abort_unless($task->worker_id === $request->user()->id, 403);
+
+        if ($task->status === 'Belum Dimulai') {
+            $task->update(['status' => 'Sedang Jalan']);
+        }
+
+        return back()->with('success', 'Status tugas #' . $task->task_code . ' diperbarui menjadi Sedang Jalan.');
     }
 }

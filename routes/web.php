@@ -118,6 +118,12 @@ Route::middleware(['auth', 'role:staf'])->group(function () {
         'index'
     ])->name('pemilik.pohon-lokasi');
 
+    //Untuk update data pohon 
+    Route::put('/dashboard/pemilik/pohon-lokasi/{tree}', [
+        PohonLokasiController::class,
+        'update'
+    ])->name('pemilik.pohon-lokasi.update');
+
     Route::post('/dashboard/pemilik/pohon-lokasi', [
         PohonLokasiController::class,
         'store'
@@ -202,6 +208,12 @@ Route::middleware(['auth', 'role:staf'])->group(function () {
         'store',
     ])->name('staf.penjualan.store');
 
+    //untuk update status
+    Route::patch('/dashboard/staf/laporan-penjualan/{sale}/status', [
+        LaporanPenjualanStafController::class,
+        'updateStatus',
+    ])->name('staf.penjualan.update-status');
+
     // Rekap hasil penjualan ke pabrik setiap 14 hari panen
     Route::get('/dashboard/staf/hasil-penjualan-pabrik', [
         LaporanPenjualanStafController::class,
@@ -230,6 +242,12 @@ Route::middleware(['auth', 'role:pekerja'])->group(function () {
         ArahanTugasController::class,
         'index',
     ])->name('pekerja.arahan-tugas');
+
+    //Mulai mengerjakan tugas
+    Route::patch('/dashboard/pekerja/arahan-tugas/{task}/mulai', [
+        ArahanTugasController::class,
+        'start',
+    ])->name('pekerja.arahan-tugas.start');
 
     // Laporan Pekerjaan
     Route::get('/dashboard/pekerja/laporan-pekerjaan', [

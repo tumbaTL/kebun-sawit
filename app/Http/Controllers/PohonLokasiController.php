@@ -127,4 +127,20 @@ class PohonLokasiController extends Controller
             ->route('pemilik.pohon-lokasi')
             ->with('success', 'Data pohon ' . $tree->tree_code . ' berhasil disimpan.');
     }
-}
+    public function update(Request $request, Tree $tree)
+    {
+        $validated = $request->validate([
+            'age_months' => ['required', 'integer', 'min:0', 'max:65535'],
+            'condition' => ['required', Rule::in(['Sehat', 'Urgent', 'Pemulihan'])],
+            'maintenance_status' => [
+                'required',
+                Rule::in(['Terkendali', 'Jadwal Mendatang', 'Terlambat']),
+            ],
+        ]);
+
+        $tree->update($validated);
+
+        return redirect()
+            ->route('pemilik.pohon-lokasi')
+            ->with('success', 'Data pohon ' . $tree->tree_code . ' berhasil diperbarui.');
+    }

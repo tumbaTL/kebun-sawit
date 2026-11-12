@@ -21,6 +21,7 @@ class LaporanPekerjaanController extends Controller
         $assignedTasks = WorkTask::query()->where('worker_id', $workerId);
 
         $tugas = (clone $assignedTasks)
+            ->where('status', '!=', 'Selesai')
             ->orderBy('deadline')
             ->orderBy('task_code')
             ->get([
@@ -167,9 +168,12 @@ class LaporanPekerjaanController extends Controller
                 'photo_paths' => $savedPaths ?: null,
                 'status_verification' => 'Menunggu',
             ]);
+            if ($task->status === 'Belum Dimulai') {
+                $task->update(['status' => 'Sedang Jalan']);
+            }
         } catch (Throwable $exception) {
             if ($savedPaths !== []) {
-                Storage::disk('local')->delete($savedPaths);
+                Storage::disk('public')->delete($savedPaths);
             }
 
             throw $exception;

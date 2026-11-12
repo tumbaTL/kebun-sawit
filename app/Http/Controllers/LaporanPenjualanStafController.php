@@ -111,6 +111,18 @@ class LaporanPenjualanStafController extends Controller
                 'Laporan penjualan berhasil disimpan.'
             );
     }
+    public function updateStatus(Request $request, Sale $sale): RedirectResponse
+    {
+        abort_unless($request->user()?->role === 'staf', 403);
+
+        $validated = $request->validate([
+            'status' => ['required', 'in:Lunas,Belum Lunas'],
+        ]);
+
+        $sale->update(['status' => $validated['status']]);
+
+        return back()->with('success', 'Status pembayaran penjualan berhasil diperbarui.');
+    }
 
     public function factoryResults(Request $request): View
     {
@@ -252,8 +264,7 @@ class LaporanPenjualanStafController extends Controller
         return $sales
             ->filter(
                 fn(Sale $sale) =>
-                    $sale->harvest_period_start->format('Y-m')
-                    === $selectedMonth
+                    $sale->sale_date?->format('Y-m') === $selectedMonth
             )
             ->values();
     }

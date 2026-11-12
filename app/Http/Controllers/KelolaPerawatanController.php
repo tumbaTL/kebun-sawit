@@ -24,8 +24,12 @@ class KelolaPerawatanController extends Controller
             ->latest('id')
             ->paginate(5);
 
-        $nextId = ((int) MaintenanceRecord::max('id')) + 1;
-        $nextMaintenanceCode = 'MT-' . now()->format('ymd') . '-' . str_pad((string) $nextId, 4, '0', STR_PAD_LEFT);
+        $sequence = 1;
+        $todayPrefix = 'MT-' . now()->format('ymd') . '-';
+        do {
+            $nextMaintenanceCode = $todayPrefix . str_pad((string) $sequence, 4, '0', STR_PAD_LEFT);
+            $sequence++;
+        } while (MaintenanceRecord::where('maintenance_code', $nextMaintenanceCode)->exists());
 
         $latest = MaintenanceRecord::latest('updated_at')->first();
         $lastUpdatedLabel = $latest

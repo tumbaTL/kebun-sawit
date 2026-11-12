@@ -33,7 +33,7 @@ class KelolaJadwalController extends Controller
 
         $scheduleDates = MaintenanceSchedule::query()
             ->pluck('schedule_date')
-            ->map(fn($date) => (string) $date)
+            ->map(fn($date) => \Carbon\Carbon::parse($date)->format('Y-m-d'))
             ->values()
             ->all();
 
