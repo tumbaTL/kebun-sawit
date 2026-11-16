@@ -62,11 +62,11 @@ class LaporanPenjualanStafController extends Controller
                 'gt:0',
                 'max:99999.999'
             ],
-            'price_per_kg' => [
+            'weight_tons' => [
                 'required',
                 'numeric',
                 'gt:0',
-                'max:99999.99'
+                'max:99999999'
             ],
             'status' => ['required', 'in:Lunas,Belum Lunas'],
             'notes' => ['nullable', 'string', 'max:5000'],
@@ -82,14 +82,11 @@ class LaporanPenjualanStafController extends Controller
         // 14 hari termasuk tanggal awal.
         $periodEnd = $periodStart->copy()->addDays(13);
 
-        $weightTons = (float) $validated['weight_tons'];
+        $weightKg = (float) $validated['weight_tons'];
         $pricePerKg = (float) $validated['price_per_kg'];
 
-        // Satu ton = 1.000 kg.
-        $totalAmount = round(
-            $weightTons * 1000 * $pricePerKg,
-            2
-        );
+        // Langsung hitung berat (kg) × harga per kg tanpa dikali 1.000.
+        $totalAmount = round($weightKg * $pricePerKg, 2);
 
         Sale::create([
             'sale_date' => $validated['sale_date'],

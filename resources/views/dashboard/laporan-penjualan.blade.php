@@ -831,6 +831,7 @@
 
             <section class="summary">
                 <article class="summary-card">
+                    <div class="summary-label">Total Nilai Penjualan</div>
                     <div class="summary-value">
                         Rp <span data-count-up="{{ (float) $totalAmount }}"
                             data-count-decimals="0">{{ number_format($totalAmount, 0, ',', '.') }}</span>
@@ -839,11 +840,12 @@
                 <article class="summary-card">
                     <div class="summary-value">
                         <span data-count-up="{{ (float) $totalTons }}"
-                            data-count-decimals="3">{{ number_format($totalTons, 3, ',', '.') }}</span>
-                        <small>ton</small>
+                            data-count-decimals="0">{{ number_format($totalTons, 0, ',', '.') }}</span>
+                        <small>kg</small>
                     </div>
                 </article>
                 <article class="summary-card">
+                    <div class="summary-label">Total Belum Lunas</div>
                     <div class="summary-value">
                         Rp <span data-count-up="{{ (float) $unpaidAmount }}"
                             data-count-decimals="0">{{ number_format($unpaidAmount, 0, ',', '.') }}</span>
@@ -875,9 +877,9 @@
                             <div class="field"><label for="factory_name">Nama pabrik tujuan</label><input type="text"
                                     id="factory_name" name="factory_name" value="{{ old('factory_name') }}"
                                     maxlength="150" placeholder="Contoh: PKS Sihombing" required></div>
-                            <div class="field"><label for="weight_tons">Berat TBS (ton)</label><input type="number"
-                                    id="weight_tons" name="weight_tons" value="{{ old('weight_tons') }}" min="0.001"
-                                    max="99999.999" step="0.001" placeholder="Contoh: 24.500" required></div>
+                            <div class="field"><label for="weight_tons">Berat TBS (kg)</label><input type="number"
+                                    id="weight_tons" name="weight_tons" value="{{ old('weight_tons') }}" min="1"
+                                    max="99999999" step="1" placeholder="Contoh: 8000" required></div>
                             <div class="field"><label for="price_per_kg">Harga per kg (Rp)</label><input type="number"
                                     id="price_per_kg" name="price_per_kg" value="{{ old('price_per_kg') }}" min="0.01"
                                     max="99999.99" step="0.01" placeholder="Contoh: 2850" required></div>
@@ -887,8 +889,8 @@
                                     <option value="Lunas" {{ old('status') === 'Lunas' ? 'selected' : '' }}>Lunas</option>
                                 </select></div>
                             <div class="field"><label>Perkiraan total penjualan</label>
-                                <div class="period-preview" id="totalPreview">Rp 0</div>
-                                <div class="help">Otomatis dihitung: ton × 1.000 × harga per kg.</div>
+                                <div class="period-preview" id="totalPreview">Rp 0</div> 
+                                <div class="help">Otomatis dihitung: berat (kg) × harga per kg.</div>
                             </div>
                             <div class="field full"><label for="notes">Catatan (opsional)</label><textarea id="notes"
                                     name="notes" maxlength="5000"
@@ -978,8 +980,8 @@
             endPreview.textContent = `${fmt.format(new Date(startInput.value + 'T00:00:00'))} – ${fmt.format(start)}`;
         }
         function updateTotal() {
-            const tons = Number(tonInput.value || 0), price = Number(priceInput.value || 0);
-            totalPreview.textContent = 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(tons * 1000 * price);
+            const kg = Number(tonInput.value || 0), price = Number(priceInput.value || 0);
+            totalPreview.textContent = 'Rp ' + new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(kg * price);
         }
         startInput?.addEventListener('change', updatePeriod); tonInput?.addEventListener('input', updateTotal); priceInput?.addEventListener('input', updateTotal);
         updatePeriod(); updateTotal();

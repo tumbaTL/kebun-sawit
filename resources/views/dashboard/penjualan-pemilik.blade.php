@@ -478,8 +478,8 @@
             <article class="summary-card tonnage">
                 <div class="amount">
                     <span data-count-up="{{ (float) $totalTons }}"
-                        data-count-decimals="3">{{ number_format($totalTons, 3, ',', '.') }}</span>
-                    ton
+                        data-count-decimals="0">{{ number_format($totalTons, 0, ',', '.') }}</span>
+                    <small>kg</small>
                 </div>
             </article>
             <article class="summary-card unpaid">
