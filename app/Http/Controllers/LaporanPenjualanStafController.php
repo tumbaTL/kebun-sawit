@@ -60,13 +60,13 @@ class LaporanPenjualanStafController extends Controller
                 'required',
                 'numeric',
                 'gt:0',
-                'max:99999.999'
+                'max:99999999'
             ],
-            'weight_tons' => [
+            'price_per_kg' => [
                 'required',
                 'numeric',
                 'gt:0',
-                'max:99999999'
+                'max:999999.99'
             ],
             'status' => ['required', 'in:Lunas,Belum Lunas'],
             'notes' => ['nullable', 'string', 'max:5000'],
@@ -85,7 +85,7 @@ class LaporanPenjualanStafController extends Controller
         $weightKg = (float) $validated['weight_tons'];
         $pricePerKg = (float) $validated['price_per_kg'];
 
-        // Langsung hitung berat (kg) × harga per kg tanpa dikali 1.000.
+        // Langsung hitung berat (kg) 
         $totalAmount = round($weightKg * $pricePerKg, 2);
 
         Sale::create([
@@ -93,7 +93,7 @@ class LaporanPenjualanStafController extends Controller
             'harvest_period_start' => $periodStart->toDateString(),
             'harvest_period_end' => $periodEnd->toDateString(),
             'factory_name' => trim($validated['factory_name']),
-            'weight_tons' => $weightTons,
+            'weight_tons' => $weightKg,
             'price_per_kg' => $pricePerKg,
             'total_amount' => $totalAmount,
             'status' => $validated['status'],
