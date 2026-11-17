@@ -838,6 +838,7 @@
                     </div>
                 </article>
                 <article class="summary-card">
+                    <div class="summary-label">Total Berat TBS(Kg)</div> 
                     <div class="summary-value">
                         <span data-count-up="{{ (float) $totalTons }}"
                             data-count-decimals="0">{{ number_format($totalTons, 0, ',', '.') }}</span>

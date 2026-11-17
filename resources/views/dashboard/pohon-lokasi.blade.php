@@ -1975,37 +1975,57 @@
                  TABLE
 
             ========================== -->
-
                 <div class="card table-card">
 
-                    <div class="table-header">
+                    <div class="table-header" style="flex-wrap: wrap; gap: 10px; padding: 12px 16px;">
 
                         <div class="table-title">
-
                             <i data-lucide="table-2"></i>
-
                             Daftar Inventaris Pohon
-
                         </div>
 
-                        <div class="table-tools">
+                        <form method="GET" action="{{ route('pemilik.pohon-lokasi') }}" class="table-tools"
+                            style="flex-wrap: wrap; width: auto;">
+
+                            <input type="hidden" name="per_page" value="{{ request('per_page', 25) }}">
+
+                            <select name="block_id" onchange="this.form.submit()"
+                                style="height: 27px; border: 1px solid #d4dad4; border-radius: 8px; background: #f7f8f7; padding: 0 8px; font-family: inherit; font-size: 9.5px; color: #4f564f;">
+                                <option value="">Semua Blok</option>
+                                @foreach ($blocks ?? [] as $blk)
+                                    <option value="{{ $blk->id }}" {{ (string) request('block_id') === (string) $blk->id ? 'selected' : '' }}>
+                                        {{ $blk->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <select name="condition" onchange="this.form.submit()"
+                                style="height: 27px; border: 1px solid #d4dad4; border-radius: 8px; background: #f7f8f7; padding: 0 8px; font-family: inherit; font-size: 9.5px; color: #4f564f;">
+                                <option value="">Semua Kondisi</option>
+                                @foreach (['Sehat', 'Pemulihan', 'Urgent'] as $cond)
+                                    <option value="{{ $cond }}" {{ request('condition') === $cond ? 'selected' : '' }}>
+                                        {{ $cond }}
+                                    </option>
+                                @endforeach
+                            </select>
 
                             <div class="table-search">
-
                                 <i data-lucide="search"></i>
-
-                                <input type="text" id="tableSearch" placeholder="Cari ID, Lokasi, atau Kondisi..."
-                                    onkeyup="searchTable()">
-
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    placeholder="Cari ID, Lokasi, atau Kondisi...">
                             </div>
 
-                            <button class="filter-btn">
-
+                            <button type="submit" class="filter-btn" title="Terapkan Filter">
                                 <i data-lucide="filter"></i>
-
                             </button>
 
-                        </div>
+                            @if (request()->filled('search') || request()->filled('block_id') || request()->filled('condition'))
+                                <a href="{{ route('pemilik.pohon-lokasi', ['per_page' => request('per_page', 25)]) }}"
+                                    class="filter-btn" title="Reset Filter" style="text-decoration: none; color: #dc2020;">
+                                    <i data-lucide="x"></i>
+                                </a>
+                            @endif
+                        </form>
 
                     </div>
 
@@ -2014,23 +2034,14 @@
                         <table id="treeTable">
 
                             <thead>
-
                                 <tr>
-
                                     <th>ID POHON</th>
-
                                     <th>LOKASI</th>
-
                                     <th>UMUR</th>
-
                                     <th>KONDISI</th>
-
                                     <th>STATUS PERAWATAN</th>
-
                                     <th>AKSI</th>
-
                                 </tr>
-
                             </thead>
 
                             <tbody>
@@ -2068,11 +2079,10 @@
                                 @empty
                                     <tr>
                                         <td colspan="6" style="text-align: center; padding: 24px;">
-                                            Belum ada data pohon. Silakan tambahkan melalui formulir di atas.
+                                            Tidak ada data pohon yang sesuai dengan filter.
                                         </td>
                                     </tr>
                                 @endforelse
-
                             </tbody>
 
                         </table>
@@ -2080,30 +2090,72 @@
                     </div>
 
                     <!-- TABLE FOOTER -->
-                    <div class="table-footer">
-                        <div>
-                            Menampilkan {{ $trees->firstItem() ?? 0 }}-{{ $trees->lastItem() ?? 0 }} dari
-                            {{ number_format($trees->total(), 0, ',', '.') }} data pohon
+                    <div class="table-footer" style="flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <span>
+                                Menampilkan {{ $trees->firstItem() ?? 0 }}-{{ $trees->lastItem() ?? 0 }} dari
+                                {{ number_format($trees->total(), 0, ',', '.') }} data pohon
+                            </span>
+
+                            <form method="GET" action="{{ route('pemilik.pohon-lokasi') }}"
+                                style="display: inline-flex; align-items: center; gap: 6px;">
+                                @foreach (request()->except(['per_page', 'page']) as $key => $val)
+                                    <input type="hidden" name="{{ $key }}" value="{{ $val }}">
+                                @endforeach
+                                <label for="per_page">Tampilkan:</label>
+                                <select name="per_page" id="per_page" onchange="this.form.submit()"
+                                    style="height: 26px; border: 1px solid #d4dad4; border-radius: 7px; padding: 0 6px; font-family: inherit; font-size: 10px; background: #fff; color: #4f564f;">
+                                    @foreach ([10, 25, 50, 100] as $size)
+                                        <option value="{{ $size }}" {{ (int) request('per_page', 25) === $size ? 'selected' : '' }}>
+                                            {{ $size }} baris
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </form>
                         </div>
 
                         <div class="pagination">
                             @if ($trees->onFirstPage())
-                                <span class="page-btn disabled" aria-label="Halaman sebelumnya"><i
-                                        data-lucide="chevron-left"></i></span>
+                                <span class="page-btn disabled" aria-label="Halaman sebelumnya"><i data-lucide="chevron-left"></i></span>
                             @else
-                                <a class="page-btn" href="{{ $trees->previousPageUrl() }}"
-                                    aria-label="Halaman sebelumnya"><i data-lucide="chevron-left"></i></a>
+                                <a class="page-btn" href="{{ $trees->previousPageUrl() }}" aria-label="Halaman sebelumnya"
+                                    style="text-decoration: none;"><i data-lucide="chevron-left"></i></a>
                             @endif
 
-                            <span class="page-btn active">{{ $trees->currentPage() }}</span>
+                            @php
+                                $current = $trees->currentPage();
+                                $last = $trees->lastPage();
+                                $start = max(1, $current - 2);
+                                $end = min($last, $current + 2);
+                            @endphp
+
+                            @if ($start > 1)
+                                <a class="page-btn" href="{{ $trees->url(1) }}" style="text-decoration: none;">1</a>
+                                @if ($start > 2)
+                                    <span style="padding: 0 3px;">...</span>
+                                @endif
+                            @endif
+
+                            @for ($page = $start; $page <= $end; $page++)
+                                @if ($page === $current)
+                                    <span class="page-btn active">{{ $page }}</span>
+                                @else
+                                    <a class="page-btn" href="{{ $trees->url($page) }}" style="text-decoration: none;">{{ $page }}</a>
+                                @endif
+                            @endfor
+
+                            @if ($end < $last)
+                                @if ($end < $last - 1)
+                                    <span style="padding: 0 3px;">...</span>
+                                @endif
+                                <a class="page-btn" href="{{ $trees->url($last) }}" style="text-decoration: none;">{{ $last }}</a>
+                            @endif
 
                             @if ($trees->hasMorePages())
-                                <a class="page-btn" href="{{ $trees->nextPageUrl() }}">{{ $trees->currentPage() + 1 }}</a>
-                                <a class="page-btn" href="{{ $trees->nextPageUrl() }}" aria-label="Halaman berikutnya"><i
-                                        data-lucide="chevron-right"></i></a>
+                                <a class="page-btn" href="{{ $trees->nextPageUrl() }}" aria-label="Halaman berikutnya"
+                                    style="text-decoration: none;"><i data-lucide="chevron-right"></i></a>
                             @else
-                                <span class="page-btn disabled" aria-label="Halaman berikutnya"><i
-                                        data-lucide="chevron-right"></i></span>
+                                <span class="page-btn disabled" aria-label="Halaman berikutnya"><i data-lucide="chevron-right"></i></span>
                             @endif
                         </div>
                     </div>

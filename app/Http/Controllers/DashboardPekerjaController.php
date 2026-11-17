@@ -16,18 +16,24 @@ class DashboardPekerjaController extends Controller
         $assignedTasks = WorkTask::query()
             ->where('worker_id', $worker->id);
 
-        // Tugas yang masih berada dalam rentang tanggal hari ini.
-        $todayTasks = (clone $assignedTasks)
+        // Tugas yang berada dalam rentang tanggal hari ini.
+        $jumlahTugas = (clone $assignedTasks)
             ->whereDate('start_date', '<=', today()->toDateString())
-            ->whereDate('deadline', '>=', today()->toDateString());
+            ->whereDate('deadline', '>=', today()->toDateString())
+            ->count();
 
-        $jumlahTugas = (clone $todayTasks)->count();
+        // Fallback: jika tidak ada tugas tepat di rentang tanggal hari ini, tampilkan total tugas aktif
+        if ($jumlahTugas === 0) {
+            $jumlahTugas = (clone $assignedTasks)
+                ->where('status', '!=', 'Selesai')
+                ->count();
+        }
 
-        $jumlahSelesai = (clone $todayTasks)
+        $jumlahSelesai = (clone $assignedTasks)
             ->where('status', 'Selesai')
             ->count();
 
-        $jumlahBelumSelesai = (clone $todayTasks)
+        $jumlahBelumSelesai = (clone $assignedTasks)
             ->where('status', '!=', 'Selesai')
             ->count();
 

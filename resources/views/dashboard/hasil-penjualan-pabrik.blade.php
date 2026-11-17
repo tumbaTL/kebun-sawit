@@ -713,6 +713,7 @@
                         <span data-count-up="{{ (float) $totalTons }}"
                             data-count-decimals="0">{{ number_format($totalTons, 0, ',', '.') }}</span>
                         <small>kg</small>
+                        <div class="summary-label">Total Berat TBS(Kg)</div>
                     </div>
                 </article>
                 <article class="summary-card">
@@ -727,6 +728,7 @@
                         <span data-count-up="{{ (float) $periodCount }}"
                             data-count-decimals="0">{{ number_format($periodCount, 0, ',', '.') }}</span>
                     </div>
+                    <div class="summary-note">Jumlah periode panen 14 hari</div>
                 </article>
             </section>
             <section class="panel">

@@ -515,6 +515,10 @@
             display: flex;
         }
 
+        .pagination button:disabled {
+            cursor: default;
+        }
+
         .pagination svg {
             width: 14px;
             height: 14px;
@@ -648,7 +652,7 @@
         }
     </style>
 
-<link rel="stylesheet" href="{{ asset('css/staff-background.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/staff-background.css') }}">
 
 </head>
 
@@ -657,7 +661,7 @@
         $namaPekerja = auth()->user()->name ?? 'Pekerja';
         $namaDepan = explode(' ', trim($namaPekerja))[0] ?: 'Pekerja';
 
-        // Data sekarang berasal dari DashboardPekerjaController.
+        // Data berasal dari DashboardPekerjaController.
         $tugas = $tugas ?? [];
         $jumlahTugas = $jumlahTugas ?? 0;
         $jumlahSelesai = $jumlahSelesai ?? 0;
@@ -736,10 +740,30 @@
 
         <section class="content">
             <div class="welcome">
-                <h1>Selamat Pagi, {{ $namaDepan }}!</h1>
+                <h1><span id="salam-waktu">Selamat Pagi</span>, {{ $namaDepan }}!</h1>
                 <p>Siap untuk melanjutkan pemeliharaan di Blok C12 hari ini?</p>
                 <p>Tetap jaga keselamatan kerja.</p>
             </div>
+
+            <script>
+                (function () {
+                    const jam = new Date().getHours();
+                    let salam = 'Selamat Malam';
+
+                    if (jam >= 4 && jam < 11) {
+                        salam = 'Selamat Pagi';
+                    } else if (jam >= 11 && jam < 15) {
+                        salam = 'Selamat Siang';
+                    } else if (jam >= 15 && jam < 18) {
+                        salam = 'Selamat Sore';
+                    }
+
+                    const elemenSalam = document.getElementById('salam-waktu');
+                    if (elemenSalam) {
+                        elemenSalam.textContent = salam;
+                    }
+                })();
+            </script>
 
             <section class="stats">
                 <article class="stat-card">
@@ -813,7 +837,7 @@
                         </thead>
 
                         <tbody id="task-body">
-                            @foreach ($tugas as $item)
+                            @forelse ($tugas as $item)
                                 <tr data-status="{{ $item['class'] }}">
                                     <td class="task-id">{{ $item['id'] }}</td>
                                     <td>{{ $item['jenis'] }}</td>
@@ -835,22 +859,28 @@
                                         <a class="detail-link" href="{{ route('pekerja.arahan-tugas') }}">
                                             Detail
                                         </a>
-                                        </a>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr id="empty-row">
+                                    <td colspan="6" style="text-align: center; padding: 22px; color: #657064;">
+                                        Belum ada tugas yang ditugaskan untuk Anda.
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
 
                 <div class="table-footer">
-                    <span id="task-count">Menampilkan 4 tugas contoh</span>
+                    <span id="task-count">Menampilkan {{ count($tugas) }} tugas</span>
 
                     <div class="pagination">
-                        <button type="button" aria-label="Halaman sebelumnya">
+                        <span id="page-info" style="font-size: 9px; color: #485047;"></span>
+                        <button type="button" id="prev-page" aria-label="Halaman sebelumnya">
                             <i data-lucide="chevron-left"></i>
                         </button>
-                        <button type="button" aria-label="Halaman berikutnya">
+                        <button type="button" id="next-page" aria-label="Halaman berikutnya">
                             <i data-lucide="chevron-right"></i>
                         </button>
                     </div>
@@ -871,8 +901,46 @@
 
         const filterButton = document.getElementById('filter-button');
         const filterMenu = document.getElementById('filter-menu');
-        const taskRows = Array.from(document.querySelectorAll('#task-body tr'));
+        const allRows = Array.from(document.querySelectorAll('#task-body tr[data-status]'));
         const taskCount = document.getElementById('task-count');
+        const pageInfo = document.getElementById('page-info');
+        const prevBtn = document.getElementById('prev-page');
+        const nextBtn = document.getElementById('next-page');
+
+        const perPage = 10;
+        let currentFilter = 'semua';
+        let currentPage = 1;
+
+        function renderTable() {
+            const filteredRows = allRows.filter(row =>
+                currentFilter === 'semua' || row.dataset.status === currentFilter
+            );
+
+            const total = filteredRows.length;
+            const totalPages = Math.max(1, Math.ceil(total / perPage));
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const startIdx = (currentPage - 1) * perPage;
+            const endIdx = startIdx + perPage;
+
+            allRows.forEach(row => row.style.display = 'none');
+            filteredRows.slice(startIdx, endIdx).forEach(row => row.style.display = '');
+
+            if (total === 0) {
+                taskCount.textContent = 'Menampilkan 0 tugas';
+                pageInfo.textContent = '';
+            } else {
+                const from = startIdx + 1;
+                const to = Math.min(endIdx, total);
+                taskCount.textContent = `Menampilkan ${from}-${to} dari ${total} tugas`;
+                pageInfo.textContent = `Hal ${currentPage}/${totalPages}`;
+            }
+
+            prevBtn.disabled = currentPage <= 1;
+            prevBtn.style.opacity = currentPage <= 1 ? '0.4' : '1';
+            nextBtn.disabled = currentPage >= totalPages;
+            nextBtn.style.opacity = currentPage >= totalPages ? '0.4' : '1';
+        }
 
         filterButton.addEventListener('click', function () {
             filterMenu.classList.toggle('show');
@@ -880,26 +948,23 @@
 
         filterMenu.querySelectorAll('button').forEach(function (button) {
             button.addEventListener('click', function () {
-                const filter = this.dataset.filter;
-                let visible = 0;
-
-                taskRows.forEach(function (row) {
-                    const match =
-                        filter === 'semua' ||
-                        row.dataset.status === filter;
-
-                    row.style.display = match ? '' : 'none';
-
-                    if (match) {
-                        visible++;
-                    }
-                });
-
-                taskCount.textContent =
-                    'Menampilkan ' + visible + ' tugas contoh';
-
+                currentFilter = this.dataset.filter;
+                currentPage = 1;
+                renderTable();
                 filterMenu.classList.remove('show');
             });
+        });
+
+        prevBtn.addEventListener('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        });
+
+        nextBtn.addEventListener('click', function () {
+            currentPage++;
+            renderTable();
         });
 
         document.addEventListener('click', function (event) {
@@ -907,6 +972,8 @@
                 filterMenu.classList.remove('show');
             }
         });
+
+        renderTable();
     </script>
 </body>
 
