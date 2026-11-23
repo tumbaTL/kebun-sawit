@@ -128,12 +128,18 @@
         }
 
         .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 30px
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+
+    background: #ffffff;
+    min-height: 90px;
+    padding: 0 25px;
+
+    margin: -24px -18px 30px -21px;
+    border-bottom: 1px solid #d9ded9;
+}
 
         .topbar h1 {
             color: var(--green);
